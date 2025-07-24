@@ -14,7 +14,7 @@ const config = {
       precompress: false
     }),
     paths: {
-      base: dev ? '' : '/photography-scaffold'
+    //   base: dev ? '' : '/photography-scaffold'
     }
   }
 };
