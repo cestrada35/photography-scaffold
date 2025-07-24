@@ -42,7 +42,7 @@
     {#each carouselImages as image}
       <div class="carousel-slide">
         <img 
-          src={`/assets/carousel/${image}`} 
+          src={`/photography-scaffold/assets/carousel/${image}`} 
           alt="Featured photography" 
           class="carousel-image"
         />
