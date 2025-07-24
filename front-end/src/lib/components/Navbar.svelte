@@ -49,7 +49,11 @@
 </script>
 
 <nav class={`navbar ${scrolled ? 'scrolled' : ''}`}>
-  <div class="site-title">{siteTitle}</div>
+  <div class="site-title">
+    <a href="/">
+        {siteTitle}
+    </a>
+</div>
   <div class="nav-links">
     <!-- Galleries Dropdown -->
     <div class="dropdown-container"
