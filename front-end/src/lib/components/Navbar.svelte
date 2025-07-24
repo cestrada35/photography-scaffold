@@ -11,8 +11,8 @@
   ];
   
   const aboutMenu = [
-    { title: "About Me", href: "/about" },
-    { title: "Contact", href: "/contact" }
+    { title: "About Me", href: "/photography-scaffold/about" },
+    { title: "Contact", href: "/photography-scaffold/contact" }
   ];
   
   const servicesMenu = [

@@ -34,7 +34,7 @@
         </div>
         
         <div class="about-image">
-          <img src="/assets/about.jpg" alt="Photographer portrait" />
+          <img src="/photography-scaffold/assets/about.jpg" alt="Photographer portrait" />
         </div>
       </div>
       
