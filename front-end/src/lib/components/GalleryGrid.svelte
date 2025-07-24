@@ -6,7 +6,7 @@
 <div class="gallery-grid" id="gallery">
   {#each galleryImages as image}
     <div class="gallery-item">
-      <ImageHover src={`/assets/gallery/${image}`} alt="Gallery photo">
+      <ImageHover src={`/photography-scaffold/assets/gallery/${image}`} alt="Gallery photo">
         <h3>Brief Description</h3>
       </ImageHover>
     </div>
