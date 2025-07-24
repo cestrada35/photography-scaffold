@@ -50,7 +50,7 @@
 
 <nav class={`navbar ${scrolled ? 'scrolled' : ''}`}>
   <div class="site-title">
-    <a href="/">
+    <a href="/photography-scaffold/">
         {siteTitle}
     </a>
 </div>
