@@ -1,16 +1,16 @@
-<script>
+<!-- <script>
   import Carousel from '$lib/components/Carousel.svelte';
   import GalleryGrid from '$lib/components/GalleryGrid.svelte';
   import BookNow from '$lib/components/BookNow.svelte';
   import Navbar from '$lib/components/Navbar.svelte';
+  import { websiteName } from '$stores/appStore.js';
 
-  // TODO: set siteTitle/website_name in script section
 </script>
 
 <main>
-  <Navbar siteTitle = "Jane's Photography"/>
+  <Navbar siteTitle={ $websiteName }/>
   <Carousel />
-  <BookNow city="Los Angeles" website_name="Jane's Photography"/>
+  <BookNow city="Los Angeles" website_name={ $websiteName }/>
   <GalleryGrid />
 </main>
 
@@ -22,6 +22,95 @@
   }
   
   @media (max-width: 768px) {
+    main {
+      padding-top: 55px;
+    }
+  }
+</style> -->
+
+
+<script>
+  import Carousel from '$lib/components/Carousel.svelte';
+  import GalleryGrid from '$lib/components/GalleryGrid.svelte';
+  import BookNow from '$lib/components/BookNow.svelte';
+  import Navbar from '$lib/components/Navbar.svelte';
+  import { websiteName } from '$stores/appStore.js';
+</script>
+
+<main>
+  <Navbar siteTitle={$websiteName} />
+  
+  <!-- Hero Carousel Section -->
+  <section class="hero-section">
+    <Carousel />
+  </section>
+  
+  <!-- Book Now Section -->
+  <BookNow city="Los Angeles" website_name={$websiteName} />
+  
+  <!-- Featured Gallery -->
+  <section class="featured-gallery">
+    <div class="section-header">
+      <h2>Featured Work</h2>
+      <p>Explore our collection of stunning photography</p>
+    </div>
+    <GalleryGrid />
+  </section>
+</main>
+
+<style>
+  main {
+    max-width: 100vw;
+    overflow-x: hidden;
+    background-color: #fafafa;
+  }
+  
+  .hero-section {
+    margin-bottom: -80px; /* Overlap with next section */
+    position: relative;
+    z-index: 10;
+  }
+  
+  .featured-gallery {
+    position: relative;
+    z-index: 5;
+    padding-top: 60px;
+  }
+  
+  .section-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
+  }
+  
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+  }
+  
+  .section-header p {
+    font-size: 1.25rem;
+    color: #4a5568;
+    font-weight: 300;
+  }
+  
+  @media (max-width: 768px) {
+    .hero-section {
+      margin-bottom: -40px;
+    }
+    
+    .section-header h2 {
+      font-size: 2rem;
+    }
+    
+    .section-header p {
+      font-size: 1.1rem;
+    }
+    
     main {
       padding-top: 55px;
     }

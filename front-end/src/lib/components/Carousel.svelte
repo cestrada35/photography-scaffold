@@ -41,6 +41,11 @@
   <div class="carousel-track" style={`transform: translateX(-${currentIndex * 100}%)`}>
     {#each carouselImages as image}
       <div class="carousel-slide">
+        <!-- <img 
+          src={`/assets/carousel/${image}`} 
+          alt="Featured photography" 
+          class="carousel-image"
+        /> -->
         <img 
           src={`/photography-scaffold/assets/carousel/${image}`} 
           alt="Featured photography" 

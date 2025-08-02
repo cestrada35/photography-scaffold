@@ -10,7 +10,10 @@
   <div class="content">
     <h1>{website_name}</h1>
     <p>{city} photographer specializing in capturing timeless moments</p>
-    <button class="book-now-button">Book Now</button>
+    <button class="book-now-button">
+      <!-- <a href="/booking/">Book Now</a> -->
+      <a href="/photography-scaffold/booking/">Book Now</a>
+    </button>
   </div>
 </div>
 

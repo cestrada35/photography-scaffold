@@ -1,5 +1,6 @@
 <script>
   import Navbar from '$lib/components/Navbar.svelte';
+  import { websiteName } from '$stores/appStore'; 
   
   let name = '';
   let email = '';
@@ -14,7 +15,7 @@
 </script>
 
 <main>
-  <Navbar siteTitle="Jane's Photography" />
+  <Navbar siteTitle=$websiteName />
   
   <div class="contact-container">
     <div class="contact-content">

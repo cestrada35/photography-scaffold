@@ -1,5 +1,6 @@
 <script>
   import Navbar from '$lib/components/Navbar.svelte';
+  import { siteOwner } from '$stores/appStore';
 </script>
 
 <main>
@@ -12,7 +13,7 @@
       <div class="about-section">
         <div class="about-text">
           <p>
-            I'm Jane Doe, a professional photographer with over 5 years of experience capturing life's most precious moments. 
+            I'm { $siteOwner }, a professional photographer with over 5 years of experience capturing life's most precious moments. 
             My journey began in the bustling streets of my city, where I discovered my passion for visual storytelling.
           </p>
           
@@ -34,7 +35,8 @@
         </div>
         
         <div class="about-image">
-          <img src="/photography-scaffold/assets/about.jpg" alt="Photographer portrait" />
+          <!-- <img src="/photography-scaffold/assets/about.jpg" alt="Photographer portrait" /> -->
+          <img src="/assets/about.jpg" alt="Photographer portrait" />
         </div>
       </div>
       
@@ -101,7 +103,9 @@
     flex: 1;
     border-radius: 4px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); */
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 2%;
   }
   
   .about-image img {

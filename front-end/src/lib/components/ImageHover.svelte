@@ -18,6 +18,7 @@
     overflow: hidden;
     height: 100%;
     width: 100%;
+    border-radius: 1%;
   }
 
   .gallery-image {
@@ -25,6 +26,8 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
+    border-radius: 3%;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   }
 
   .overlay {
@@ -39,6 +42,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 1px solid black;
+    /* border-radius: 3%; */
   }
 
   .overlay-content {

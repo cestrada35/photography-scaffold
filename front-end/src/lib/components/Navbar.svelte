@@ -1,7 +1,12 @@
 <script>
-  export let siteTitle = "Photography";
+  import { websiteName } from '$stores/appStore.js';
+  import { onMount } from 'svelte';
+
+
+  // import '$stores/appStore.js'
   let scrolled = false;
   let activeDropdown = null;
+  let showGalleryTooltip = true; // Controls tooltip visibility
   
   // Dropdown menu items
   const galleriesMenu = [
@@ -11,6 +16,8 @@
   ];
   
   const aboutMenu = [
+    // { title: "About Me", href: "/about" },
+    // { title: "Contact", href: "/contact" }
     { title: "About Me", href: "/photography-scaffold/about" },
     { title: "Contact", href: "/photography-scaffold/contact" }
   ];
@@ -35,10 +42,20 @@
     activeDropdown = null;
   }
   
-  // Add scroll event listener
-  import { onMount } from 'svelte';
+  
+  function dismissTooltip() {
+    showGalleryTooltip = false;
+    // Optional: Store dismissal in localStorage
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem('galleryTooltipDismissed', 'true');
+    }
+  }
   
   onMount(() => {
+     // Check if tooltip was previously dismissed
+    // if (typeof localStorage !== 'undefined') {
+    //   showGalleryTooltip = !localStorage.getItem('galleryTooltipDismissed');
+    // }
     const handleScroll = () => {
       scrolled = window.scrollY > 20;
     };
@@ -50,16 +67,26 @@
 
 <nav class={`navbar ${scrolled ? 'scrolled' : ''}`}>
   <div class="site-title">
-    <a href="/photography-scaffold/">
-        {siteTitle}
+    <!-- <a href="/photography-scaffold/"> -->
+    <a href="/">
+        { $websiteName }
     </a>
-</div>
+  </div>
   <div class="nav-links">
     <!-- Galleries Dropdown -->
-    <div class="dropdown-container"
+    <div class="dropdown-container relative"
          on:mouseenter={() => toggleDropdown('galleries')}
          on:mouseleave={closeDropdowns}>
+      {#if showGalleryTooltip}
+        <div class="gallery-tooltip" on:click|stopPropagation={dismissTooltip}>
+          <span>✨ Explore our work here! ✨ ➜</span>
+          <button class="tooltip-close" on:click|stopPropagation={dismissTooltip}>
+            ✕
+          </button>
+        </div>
+      {/if}
       <a class="nav-link" href="#galleries">Galleries</a>
+      
       {#if activeDropdown === 'galleries'}
         <div class="dropdown-menu">
           {#each galleriesMenu as item}
@@ -203,5 +230,34 @@
     .dropdown-menu {
       min-width: 160px;
     }
+  }
+
+  .gallery-tooltip {
+    position: absolute;
+    top: -4px;
+    left: -170%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #56fff4 0%, #fb76d7 100%);
+    color: #5a3d1a;
+    padding: 8px 16px;
+    border-radius: 20px;
+    height: 35px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: default;
+    z-index: 1002;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .gallery-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
   }
 </style>

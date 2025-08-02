@@ -15,6 +15,9 @@ const config = {
     }),
     paths: {
       base: dev ? '' : '/photography-scaffold'
+    },
+    alias: {
+      $stores: 'src/lib/stores'
     }
   }
 };
