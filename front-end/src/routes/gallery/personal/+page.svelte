@@ -65,8 +65,9 @@
         class:loaded={loaded}
       >
         <div class="image-container">
+          <!-- src={`/assets/gallery/${item.filename}`}  -->
           <img 
-            src={`/assets/gallery/${item.filename}`} 
+            src={`/photography-scaffold/assets/gallery/${item.filename}`} 
             alt={item.description}
             loading="lazy"
           />
