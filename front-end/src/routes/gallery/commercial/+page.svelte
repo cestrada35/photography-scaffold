@@ -37,9 +37,12 @@
 
   <!-- Hero Section -->
   <section 
-    class="hero-section" 
-    style="background-image: url('/assets/cover/{heroImage}')"
-    >
+  class="hero-section" 
+  style="background-image: url('/photography-scaffold/assets/cover/{heroImage}')"
+  >
+  <!-- style="background-image: url('/assets/cover/{heroImage}')" -->
+
+
     <!-- below is confirmed to work! -->
     <!-- <img src={`/assets/cover/${heroImage}`} alt=""> -->
     <div class="hero-content">
