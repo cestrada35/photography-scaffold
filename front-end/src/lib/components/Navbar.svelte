@@ -70,8 +70,8 @@
 
 <nav class={`navbar ${scrolled ? 'scrolled' : ''}`}>
   <div class="site-title">
-    <!-- <a href="/photography-scaffold/"> -->
-    <a href="/">
+    <a href="/photography-scaffold/">
+    <!-- <a href="/"> -->
         { $websiteName }
     </a>
   </div>

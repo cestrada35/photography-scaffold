@@ -36,8 +36,10 @@
   <!-- Hero Section -->
   <section 
     class="hero-section" 
-    style="background-image: url('/assets/cover/{heroImage}')"
+    style="background-image: url('/photography-scaffold/assets/cover/{heroImage}')"
     >
+    <!-- style="background-image: url('/assets/cover/{heroImage}')" -->
+
     <div class="hero-content">
       <h1 class="hero-title">
         {#if category === 'commercial'}

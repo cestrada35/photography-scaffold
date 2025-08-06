@@ -31,8 +31,8 @@
         </div>
         
         <div class="about-image">
-          <img src="/assets/cover/cover2.jpg" alt="Photographer portrait" />
-          <!-- <img src="/photography-scaffold/assets/about.jpg" alt="Photographer portrait" /> -->
+          <!-- <img src="/assets/cover/cover2.jpg" alt="Photographer portrait" /> -->
+          <img src="/photography-scaffold/assets/cover/cover2.jpg" alt="Photographer portrait" />
         </div>
       </div>
       
