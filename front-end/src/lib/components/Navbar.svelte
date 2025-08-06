@@ -70,8 +70,8 @@
 
 <nav class={`navbar ${scrolled ? 'scrolled' : ''}`}>
   <div class="site-title">
-    <a href="/photography-scaffold/">
-    <!-- <a href="/"> -->
+    <!-- <a href="/photography-scaffold/"> -->
+    <a href="/">
         { $websiteName }
     </a>
   </div>
@@ -237,7 +237,7 @@
 
   .gallery-tooltip {
     position: absolute;
-    top: -4px;
+    top: -6px;
     left: -170%;
     transform: translateX(-50%);
     background: linear-gradient(135deg, #56fff4 0%, #fb76d7 100%);

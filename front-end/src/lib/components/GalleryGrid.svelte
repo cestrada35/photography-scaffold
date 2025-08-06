@@ -6,6 +6,9 @@
   
   // Animation state
   let loaded = false;
+
+  // Arbirary limit
+  const galleryLimit = 9;
   
   onMount(() => {
     loaded = true;
@@ -21,23 +24,30 @@
 
 <div class="gallery-grid" id="gallery">
   {#each galleryItems as item, index (item.filename)}
-    <div 
-      class="gallery-item" 
-      style={`--delay: ${index * 0.1}s`}
-      class:loaded={loaded}
-    >
-      <div class="image-container">
-        <img 
-          src={`/photography-scaffold/assets/gallery/${item.filename}`} 
-          alt={item.description}
-          loading="lazy"
-        />
-        <div class="image-overlay">
-          <p class="image-description">{item.description}</p>
-          <span class="image-category">{item.category}</span>
+    {#if index < galleryLimit}
+      <div 
+        class="gallery-item" 
+        style={`--delay: ${index * 0.1}s`}
+        class:loaded={loaded}
+      >
+        <div class="image-container">
+          <!-- <img 
+            src={`/assets/gallery/${item.filename}`} 
+            alt={item.description}
+            loading="lazy"
+          /> -->
+          <img 
+            src={`/photography-scaffold/assets/gallery/${item.filename}`} 
+            alt={item.description}
+            loading="lazy"
+          />
+          <div class="image-overlay">
+            <p class="image-description">{item.description}</p>
+            <span class="image-category">{item.category}</span>
+          </div>
         </div>
       </div>
-    </div>
+    {/if}
   {/each}
 </div>
 

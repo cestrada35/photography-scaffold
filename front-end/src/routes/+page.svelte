@@ -1,34 +1,3 @@
-<!-- <script>
-  import Carousel from '$lib/components/Carousel.svelte';
-  import GalleryGrid from '$lib/components/GalleryGrid.svelte';
-  import BookNow from '$lib/components/BookNow.svelte';
-  import Navbar from '$lib/components/Navbar.svelte';
-  import { websiteName } from '$stores/appStore.js';
-
-</script>
-
-<main>
-  <Navbar siteTitle={ $websiteName }/>
-  <Carousel />
-  <BookNow city="Los Angeles" website_name={ $websiteName }/>
-  <GalleryGrid />
-</main>
-
-<style>
-  main {
-    max-width: 100vw;
-    overflow-x: hidden;
-
-  }
-  
-  @media (max-width: 768px) {
-    main {
-      padding-top: 55px;
-    }
-  }
-</style> -->
-
-
 <script>
   import Carousel from '$lib/components/Carousel.svelte';
   import GalleryGrid from '$lib/components/GalleryGrid.svelte';
@@ -66,7 +35,8 @@
   }
   
   .hero-section {
-    margin-bottom: -80px; /* Overlap with next section */
+    margin-top: 75px;
+    margin-bottom: -80px;
     position: relative;
     z-index: 10;
   }

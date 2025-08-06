@@ -65,12 +65,16 @@
         class:loaded={loaded}
       >
         <div class="image-container">
-          <!-- src={`/assets/gallery/${item.filename}`}  -->
-          <img 
+           <img 
             src={`/photography-scaffold/assets/gallery/${item.filename}`} 
             alt={item.description}
             loading="lazy"
           />
+          <!-- <img 
+            src={`/assets/gallery/${item.filename}`} 
+            alt={item.description}
+            loading="lazy"
+          /> -->
           <div class="image-overlay">
             <p class="image-description">{item.description}</p>
             <span class="image-category">{item.category}</span>

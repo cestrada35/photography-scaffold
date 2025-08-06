@@ -13,30 +13,26 @@
       <div class="about-section">
         <div class="about-text">
           <p>
-            I'm { $siteOwner }, a professional photographer with over 5 years of experience capturing life's most precious moments. 
-            My journey began in the bustling streets of my city, where I discovered my passion for visual storytelling.
+            Hello, I'm { $siteOwner } and for the past 15 years, my camera has been my passport to capturing the soul of moments. My journey began with a profound personal inspiration – the fleeting, magical childhood of my son.
+            It was there, amidst the everyday joys and milestones, that I truly fell in love with freezing time, transforming genuine emotions into cherished memories.
+          </p>
+          <p>
+            Today, my passion translates into a diverse canvas of visual storytelling. 
+            I specialize in crafting luminous portraits that truly reveal the essence of an individual, preserving the unforgettable energy of events – from the vibrant spirit of community gatherings like my son's school functions and swim meets, to elegant celebrations across the beautiful Beach Cities and Palos Verdes, where I've built trusted relationships with clients over many wonderful years. Furthermore, I create compelling commercial narratives that elevate brands and connect powerfully with their audience. My commitment extends beyond the lens; I meticulously sculpt each image and video through expert editing, ensuring every final piece is a masterpiece of clarity and impact.
           </p>
           
           <p>
-            Specializing in portrait and event photography, I strive to capture authentic emotions and create timeless imagery. 
-            My approach blends technical expertise with an intuitive understanding of light and composition, resulting in photographs 
-            that feel both artistic and genuine.
+            As a Chinese photographer, my perspective is enriched by a blend of cultural appreciation and a deep understanding of human connection. 
           </p>
           
           <p>
-            Over the years, I've had the privilege of working with diverse clients, from families celebrating milestones to 
-            brands seeking compelling visual content. My greatest satisfaction comes from creating images that hold deep personal meaning for my clients.
-          </p>
-          
-          <p>
-            When I'm not behind the camera, you'll find me exploring new locations for inspiration, teaching photography workshops, 
-            or experimenting with film photography techniques.
+            I believe every photograph and video should be a true reflection of joy, personality, and purpose. Let's collaborate to tell your unique story – authentically, artfully, and unforgettably.
           </p>
         </div>
         
         <div class="about-image">
-          <!-- <img src="/assets/about.jpg" alt="Photographer portrait" /> -->
-          <img src="/photography-scaffold/assets/about.jpg" alt="Photographer portrait" />
+          <img src="/assets/cover/cover2.jpg" alt="Photographer portrait" />
+          <!-- <img src="/photography-scaffold/assets/about.jpg" alt="Photographer portrait" /> -->
         </div>
       </div>
       
@@ -103,7 +99,7 @@
     flex: 1;
     border-radius: 4px;
     overflow: hidden;
-    /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     border-radius: 2%;
   }
@@ -111,7 +107,7 @@
   .about-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit:fill;
     transition: transform 0.5s ease;
   }
   

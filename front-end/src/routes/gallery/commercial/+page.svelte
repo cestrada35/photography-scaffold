@@ -1,9 +1,12 @@
 <!-- src/routes/gallery/[category]/+page.svelte -->
 <script>
   import Navbar from '$lib/components/Navbar.svelte';
-  import { galleryImages, galleryImageDescriptions, galleryImageCategories } from '$lib/utils/images.js';
+  import { galleryImages, galleryImageDescriptions, galleryImageCategories, coverImages } from '$lib/utils/images.js';
   import { onMount } from 'svelte';
+
+  // Hard-coded values
   const category = 'commercial'
+  const heroImage = 'cover1.jpg'
   
   // Combine images with their metadata
   $: galleryItems = galleryImages.map((image, index) => ({
@@ -28,8 +31,17 @@
 <Navbar />
 
 <main class="gallery-page">
+  <!-- {#each coverImages as img_name}
+      <img src={`/assets/cover/${img_name}`}>
+  {/each} -->
+
   <!-- Hero Section -->
-  <section class="hero-section">
+  <section 
+    class="hero-section" 
+    style="background-image: url('/assets/cover/{heroImage}')"
+    >
+    <!-- below is confirmed to work! -->
+    <!-- <img src={`/assets/cover/${heroImage}`} alt=""> -->
     <div class="hero-content">
       <h1 class="hero-title">
         {#if category === 'commercial'}
@@ -65,12 +77,16 @@
         class:loaded={loaded}
       >
         <div class="image-container">
-          <!-- src={`/assets/gallery/${item.filename}`}  -->
           <img 
             src={`/photography-scaffold/assets/gallery/${item.filename}`} 
             alt={item.description}
             loading="lazy"
           />
+          <!-- <img 
+            src={`/assets/gallery/${item.filename}`} 
+            alt={item.description}
+            loading="lazy"
+          /> -->
           <div class="image-overlay">
             <p class="image-description">{item.description}</p>
             <span class="image-category">{item.category}</span>
@@ -101,7 +117,7 @@
   }
 
   /* Hero Section */
-  .hero-section {
+  /* .hero-section {
     height: 60vh;
     min-height: 500px;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -110,8 +126,23 @@
     justify-content: center;
     position: relative;
     overflow: hidden;
+  } */
+   .hero-section {
+    height: 60vh;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    /* Critical background properties */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /* Fallback color */
+    background-color: #f5f7fa;
   }
-
+/* 
   .hero-section::before {
     content: '';
     position: absolute;
@@ -120,9 +151,20 @@
     width: 100%;
     height: 100%;
     background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
-  }
+  } */
 
-  .hero-content {
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* background: rgba(255,255,255,0.3); */
+  }
+  
+
+  /* .hero-content {
     text-align: center;
     position: relative;
     z-index: 2;
@@ -136,7 +178,7 @@
     font-size: 4rem;
     font-weight: 700;
     color: #2c3e50;
-    margin-bottom: 1rem;
+    margin-bottom: 25rem;
     line-height: 1.2;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
   }
@@ -145,8 +187,41 @@
     font-size: 1.5rem;
     color: #4a5568;
     max-width: 600px;
-    margin: 0 auto;
+    margin: 60 autO;
     font-weight: 300;
+  } */
+   .hero-content {
+    position: absolute;
+    top: 40px; /* Adjust this value to control distance from top */
+    left: 0;
+    right: 0;
+    padding: 0 5%; /* Adds some side padding */
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: none; /* Remove previous max-width constraint */
+    margin: 0;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0; /* Remove previous margins */
+    line-height: 1.2;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    text-align: left; /* Explicit left alignment */
+  }
+
+  .hero-subtitle {
+    font-size: 1.5rem;
+    color: #4a5568;
+    max-width: 45%; /* Control subtitle width */
+    margin: 0; /* Remove previous margins */
+    font-weight: 300;
+    text-align: right; /* Right alignment */
+    padding-top: 0.5rem; /* Optional: slight vertical adjustment */
   }
 
   /* Gallery Grid */
@@ -202,7 +277,7 @@
     left: 0;
     right: 0;
     padding: 30px;
-    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+    background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%); 
     color: white;
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -296,6 +371,8 @@
     }
     
     .hero-section {
+      /* border: 2px solid red;
+      background-image: url('{heroImage}'); */
       height: 50vh;
       min-height: 400px;
     }
