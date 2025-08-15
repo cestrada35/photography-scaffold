@@ -36,9 +36,9 @@
   <!-- Hero Section -->
   <section 
     class="hero-section" 
-    style="background-image: url('/photography-scaffold/assets/cover/{heroImage}')"
+    style="background-image: url('/assets/cover/{heroImage}')"
     >
-    <!-- style="background-image: url('/assets/cover/{heroImage}')" -->
+    <!-- style="background-image: url('/photography-scaffold/assets/cover/{heroImage}')" -->
 
     <div class="hero-content">
       <h1 class="hero-title">
@@ -75,16 +75,16 @@
         class:loaded={loaded}
       >
         <div class="image-container">
-          <img 
+          <!-- <img 
             src={`/photography-scaffold/assets/gallery/${item.filename}`} 
             alt={item.description}
             loading="lazy"
-          />
-          <!-- <img 
+          /> -->
+          <img 
             src={`/assets/gallery/${item.filename}`} 
             alt={item.description}
             loading="lazy"
-          /> -->
+          />
           <div class="image-overlay">
             <p class="image-description">{item.description}</p>
             <span class="image-category">{item.category}</span>

@@ -10,19 +10,19 @@
   
   // Dropdown menu items
   const galleriesMenu = [
-    // { title: "Commercial", href: "/gallery/commercial" },
-    // { title: "Personal", href: "/gallery/personal" },
-    // { title: "Events", href: "/gallery/events" }
-    { title: "Commercial", href: "/photography-scaffold/gallery/commercial" },
-    { title: "Personal", href: "/photography-scaffold/gallery/personal" },
-    { title: "Events", href: "/photography-scaffold/gallery/events" }
+    { title: "Commercial", href: "/gallery/commercial" },
+    { title: "Personal", href: "/gallery/personal" },
+    { title: "Events", href: "/gallery/events" }
+    // { title: "Commercial", href: "/photography-scaffold/gallery/commercial" },
+    // { title: "Personal", href: "/photography-scaffold/gallery/personal" },
+    // { title: "Events", href: "/photography-scaffold/gallery/events" }
   ];
   
   const aboutMenu = [
-    // { title: "About Me", href: "/about" },
-    // { title: "Contact", href: "/contact" }
-    { title: "About Me", href: "/photography-scaffold/about" },
-    { title: "Contact", href: "/photography-scaffold/contact" }
+    { title: "About Me", href: "/about" },
+    { title: "Contact", href: "/contact" }
+    // { title: "About Me", href: "/photography-scaffold/about" },
+    // { title: "Contact", href: "/photography-scaffold/contact" }
   ];
   
   const servicesMenu = [
@@ -70,8 +70,8 @@
 
 <nav class={`navbar ${scrolled ? 'scrolled' : ''}`}>
   <div class="site-title">
-    <a href="/photography-scaffold/">
-    <!-- <a href="/"> -->
+    <!-- <a href="/photography-scaffold/"> -->
+    <a href="/">
         { $websiteName }
     </a>
   </div>
