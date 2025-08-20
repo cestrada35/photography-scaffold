@@ -26,10 +26,11 @@
   ];
   
   const servicesMenu = [
-    { title: "Video Editing", href: "/services/video-editing" },
-    { title: "Baking", href: "/services/baking" },
-    { title: "Tutoring Services", href: "/services/tutoring" },
-    { title: "Design", href: "/services/design" }
+    { title: "Catering Services", href: "/services/catering" },
+    { title: "Online Store", href: "/services/store" }
+    // { title: "Video Editing", href: "/services/video-editing" },
+    // { title: "Tutoring Services", href: "/services/tutoring" },
+    // { title: "Design", href: "/services/design" }
   ];
   
   // Toggle dropdowns
