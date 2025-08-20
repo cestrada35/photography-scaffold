@@ -19,22 +19,24 @@
   /* themes: fantasy --default; */
   /* themes: wireframe --default; */
   /* themes: black --default; */
-  /* themes: luxury --default; */
   /* themes: dracula --default; */
   /* themes: cmyk --default; */
   /* themes: autumn --default; */
   /* themes: business --default; */
   /* themes: acid --default; */
   /* themes: lemonade --default; */
-  /* themes: night --default; */
   /* themes: coffee --default; */
   /* themes: winter --default; */
   /* themes: dim --default; */
   /* themes: nord --default; */
   /* themes: sunset --default; */
-  themes: caramellatte --default;
   /* themes: abyss --default; */
   /* themes: silk --default; */
+  /* themes: caramellatte --default; */
+  
+  
+  /* themes: luxury --default; */
+  themes: night --default;
 }
 
 :root {
