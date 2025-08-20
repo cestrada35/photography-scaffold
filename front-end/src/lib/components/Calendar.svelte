@@ -1,11 +1,34 @@
 <script>
   import { format, isSameDay, addMonths } from 'date-fns';
   
-  export let availableDates = [];
+  export let events = [];
   export let selectedDate;
   
   let currentMonth = new Date();
-  
+  let bookedDates = new Set();
+
+  // Reactively update booked dates when events change
+  // Enhanced debugging
+  $: {
+    bookedDates = new Set();
+    if (events && events.length) {
+      events.forEach(event => {
+        if (event.event_date) {
+          const dateStr = event.event_date.split('T')[0];
+          bookedDates.add(dateStr);
+        }
+      });
+      // Force calendar to redraw
+      currentMonth = new Date(currentMonth); 
+    }
+  }
+
+  function isBooked(date) {
+    if (!date) return false;
+    const dateStr = date.toISOString().split('T')[0];
+    return bookedDates.has(dateStr);
+  }
+
   function getDaysInMonth() {
     const year = currentMonth.getFullYear();
     const month = currentMonth.getMonth();
@@ -17,7 +40,6 @@
       days.push(new Date(year, month, i));
     }
     
-    // Add padding for first day
     const firstDayOfWeek = firstDay.getDay();
     for (let i = 0; i < firstDayOfWeek; i++) {
       days.unshift(null);
@@ -26,12 +48,8 @@
     return days;
   }
   
-  function isAvailable(date) {
-    return availableDates.some(d => d && date && isSameDay(d, date));
-  }
-  
   function selectDate(date) {
-    if (isAvailable(date)) {
+    if (date && !isBooked(date)) {
       selectedDate = date;
     }
   }
@@ -66,10 +84,13 @@
         class="day 
           {date ? 'has-date' : ''}
           {selectedDate && date && isSameDay(selectedDate, date) ? 'selected' : ''}
-          {isAvailable(date) ? 'available' : 'unavailable'}"
+          {date && isBooked(date) ? 'booked' : 'available'}"
         on:click={() => selectDate(date)}
       >
         {date ? date.getDate() : ''}
+        {#if date && isBooked(date)}
+          <div class="booked-indicator"></div>
+        {/if}
       </div>
     {/each}
   </div>
@@ -80,7 +101,7 @@
       <span>Available</span>
     </div>
     <div class="legend-item">
-      <div class="legend-color unavailable"></div>
+      <div class="legend-color booked"></div>
       <span>Booked</span>
     </div>
   </div>
@@ -138,6 +159,7 @@
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s ease;
+    position: relative;
   }
   
   .day.has-date {
@@ -154,10 +176,20 @@
     font-weight: 600;
   }
   
-  .day.unavailable {
-    color: #ccc;
+  .day.booked {
+    background-color: #f8f8f8;
+    color: #999;
     cursor: not-allowed;
-    text-decoration: line-through;
+  }
+  
+  .booked-indicator {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    right: 5px;
+    height: 2px;
+    background-color: #ff6b6b;
+    transform: rotate(-5deg);
   }
   
   .calendar-legend {
@@ -185,7 +217,26 @@
     background-color: #e6f0ff;
   }
   
-  .legend-color.unavailable {
-    background-color: #f0f0f0;
+  .legend-color.booked {
+    background-color: #f8f8f8;
+    position: relative;
+  }
+  
+  .legend-color.booked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #ff6b6b;
+    transform: rotate(-5deg);
+  }
+
+  .loading-message {
+    text-align: center;
+    padding: 40px;
+    font-size: 1.2rem;
+    color: #666;
   }
 </style>

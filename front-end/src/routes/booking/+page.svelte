@@ -1,24 +1,30 @@
 <script>
   import Navbar from '$lib/components/Navbar.svelte';
-  import { websiteName } from '$stores/appStore';
   import Calendar from '$lib/components/Calendar.svelte';
+  import { websiteName } from '$stores/appStore';
+  import { onMount } from 'svelte';
   
   const location = "Los Angeles";
   const serviceRadius = 10; // miles
   const rates = {
-    personal: 150,
-    event: 180,
-    commercial: 200
+    personal: 260,
+    event: 300,
+    commercial: 350
   };
   
+  
+  
   // Form state
+  let events = [];
+  $: console.log('Events updated:', events);
+  let selectedDate = null;
   let selectedService = '';
-  let selectedDate = '';
   let name = '';
   let email = '';
   let address = '';
   let hours = 2;
   let notes = '';
+  let eventsLoaded = false; // Add this flag
   
   // Mock available dates (in a real app, this would come from an API)
   const availableDates = [
@@ -28,6 +34,8 @@
     new Date(2023, 10, 25),
     new Date(2023, 10, 29)
   ];
+
+
   
   function handleSubmit() {
     alert(`Booking request received!\n\nWe'll contact you shortly at ${email} to confirm your ${selectedService} session on ${selectedDate}.`);
@@ -37,6 +45,53 @@
   function calculateTotal() {
     return rates[selectedService] * hours;
   }
+
+  async function loadEvents() {
+    try {
+      const response = await fetch('/api/events');
+      if (response.ok) {
+        events = await response.json();
+        eventsLoaded = true; // Set flag when data is loaded
+        console.log('Loaded events:', events);
+      }
+    } catch (error) {
+      console.error('Error loading events:', error);
+    }
+  }
+  
+  onMount(() => {
+    loadEvents();
+    // Refresh every 5 seconds to catch any changes
+    // const interval = setInterval(loadEvents, 5000);
+    // return () => clearInterval(interval);
+  });
+  
+  async function addTestEvent() {
+  // Format date as YYYY-MM-DD
+  const today = new Date();
+  const formattedDate = today.toISOString().split('T')[0];
+  
+  const testEvent = {
+    title: "Test Event",
+    event_date: formattedDate
+  };
+  
+  try {
+    const response = await fetch('/api/events/add', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(testEvent)
+    });
+    
+    if (response.ok) {
+      alert("Test event added successfully!");
+      await loadEvents(); // Refresh events
+    }
+  } catch (error) {
+    alert("Error adding test event");
+    console.log(error);
+  }
+}
 </script>
 
 <div class="booking-page">
@@ -57,7 +112,9 @@
           >
             <h3>Personal Photography</h3>
             <p class="rate">${rates.personal}/hour</p>
-            <p>Portraits, family sessions, and personal projects</p>
+            <p class="text-xs">Portraits, family sessions, and personal projects</p>
+            <br/>
+            <p>includes: <i>25 HD edited images and 3 printed photos (8.5x11)</i></p>
           </div>
           
           <div 
@@ -83,11 +140,22 @@
       <!-- Calendar Section -->
       <section class="calendar-section">
         <h2>Select Date</h2>
-        <Calendar 
-          availableDates={availableDates} 
-          bind:selectedDate 
-        />
+        <!-- <Calendar 
+        {events}
+        bind:selectedDate 
+        /> -->
+        {#if eventsLoaded}
+  <Calendar {events} bind:selectedDate />
+{:else}
+  <div>Loading calendar...</div>
+{/if}
+        <!-- availableDates={availableDates}  -->
       </section>
+
+      <!-- DEV STUFF, DONT SHOW ON PROD -->
+      <button on:click={addTestEvent} class="test-button">
+        Add Test Event
+      </button>
       
       <!-- Booking Form -->
       <section class="booking-form">
@@ -419,5 +487,19 @@
   .payment-btn.zelle {
     color: #6d1ed4;
     border-color: #6d1ed4;
+  }
+
+  .test-button {
+    padding: 10px 20px;
+    background: #4a6fa5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .test-button:hover {
+    background: #3a5a80;
   }
 </style>

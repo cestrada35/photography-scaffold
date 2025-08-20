@@ -10,11 +10,12 @@ const config = {
     adapter: adapter({
       pages: 'build',
       assets: 'build',
-      fallback: '404.html',
+      fallback: 'index.html',
       precompress: false
     }),
     paths: {
-      base: dev ? '' : '/photography-scaffold'
+      base: dev ? '' : '' // Replacing with empty string for live site setup
+      // base: dev ? '' : '/photography-scaffold'
     },
     alias: {
       $stores: 'src/lib/stores'

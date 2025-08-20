@@ -390,5 +390,3 @@
 
 
 <!-- TODO:  -->
-<!-- - Fix the styling on the about me pic! -->
-<!-- Set the photography-scaffold string to be enabled on this branch... -->
