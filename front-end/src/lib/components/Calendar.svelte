@@ -190,7 +190,7 @@
     right: 5px;
     height: 2px;
     background-color: #ff6b6b;
-    transform: rotate(-5deg);
+    transform: rotate(-32deg);
   }
   
   .calendar-legend {
@@ -231,7 +231,7 @@
     right: 0;
     height: 1px;
     background-color: #ff6b6b;
-    transform: rotate(-5deg);
+    transform: rotate(-32deg);
   }
 
   .loading-message {

@@ -53,6 +53,9 @@
 body {
   margin: 0;
   /* font-family: 'Raleway', sans-serif; */
+  /* font-family: 'Goudy Old Style';
+  font-family: 'Book Antiqua'; */
+  font-family: 'Lucida Bright';
   color: var(--text-color);
   overflow-x: hidden;
   line-height: 1.6;
