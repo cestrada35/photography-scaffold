@@ -7,16 +7,16 @@ export async function GET() {
       SELECT 
         id, 
         title, 
-        DATE_FORMAT(event_date, '%Y-%m-%d') AS event_date 
+        DATE_FORMAT(event_date, '%Y-%m-%d') AS event_date,
+        customer_name,
+        customer_email,
+        service_type,
+        hours,
+        notes,
+        status
       FROM events 
       ORDER BY event_date
     `);
-    
-    // Add debug logging
-    console.log('API returning events:', events.map(e => ({
-      ...e,
-      debug: `Parsed as: ${new Date(e.event_date).toISOString()}`
-    })));
     
     return new Response(JSON.stringify(events));
   } catch (error) {

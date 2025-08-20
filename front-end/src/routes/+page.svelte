@@ -55,7 +55,7 @@
   }
   
   .section-header h2 {
-    font-family: 'Playfair Display', serif;
+    /* font-family: 'Playfair Display', serif; */
     font-size: 2.5rem;
     font-weight: 700;
     /* color: #2c3e50; */

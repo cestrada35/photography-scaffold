@@ -113,24 +113,12 @@
 </main>
 
 <style>
-  /* Base Styles */
+  
   .gallery-page {
     padding-top: 80px;
-    /* background-color: #fafafa; */
   }
 
-  /* Hero Section */
-  /* .hero-section {
-    height: 60vh;
-    min-height: 500px;
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-  } */
-   .hero-section {
+  .hero-section {
     height: 60vh;
     min-height: 500px;
     display: flex;
@@ -138,23 +126,11 @@
     justify-content: center;
     position: relative;
     overflow: hidden;
-    /* Critical background properties */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    /* Fallback color */
     background-color: #f5f7fa;
   }
-/* 
-  .hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
-  } */
 
   .hero-section::before {
     content: '';
@@ -163,36 +139,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    /* background: rgba(255,255,255,0.3); */
-  }
-  
-
-  /* .hero-content {
-    text-align: center;
-    position: relative;
-    z-index: 2;
-    padding: 0 20px;
-    max-width: 800px;
-    margin: 0 auto;
   }
 
-  .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 4rem;
-    font-weight: 700;
-    color: #2c3e50;
-    margin-bottom: 25rem;
-    line-height: 1.2;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-  }
-
-  .hero-subtitle {
-    font-size: 1.5rem;
-    color: #4a5568;
-    max-width: 600px;
-    margin: 60 autO;
-    font-weight: 300;
-  } */
    .hero-content {
     position: absolute;
     top: 40px; /* Adjust this value to control distance from top */
@@ -207,7 +155,7 @@
   }
 
   .hero-title {
-    font-family: 'Playfair Display', serif;
+    /* font-family: 'Playfair Display', serif; */
     font-size: 4rem;
     font-weight: 700;
     color: #2c3e50;

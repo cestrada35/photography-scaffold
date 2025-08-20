@@ -153,7 +153,7 @@
   }
   
   .site-title {
-    font-family: 'Playfair Display', serif;
+    /* font-family: 'Playfair Display', serif; */
     font-size: 1.8rem;
     letter-spacing: 1px;
     font-weight: 500;

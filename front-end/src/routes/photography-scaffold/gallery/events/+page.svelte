@@ -162,33 +162,7 @@
   }
   
 
-  /* .hero-content {
-    text-align: center;
-    position: relative;
-    z-index: 2;
-    padding: 0 20px;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 4rem;
-    font-weight: 700;
-    color: #2c3e50;
-    margin-bottom: 25rem;
-    line-height: 1.2;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-  }
-
-  .hero-subtitle {
-    font-size: 1.5rem;
-    color: #4a5568;
-    max-width: 600px;
-    margin: 60 autO;
-    font-weight: 300;
-  } */
-   .hero-content {
+  .hero-content {
     position: absolute;
     top: 40px; /* Adjust this value to control distance from top */
     left: 0;
@@ -202,7 +176,7 @@
   }
 
   .hero-title {
-    font-family: 'Playfair Display', serif;
+    /* font-family: 'Playfair Display', serif; */
     font-size: 4rem;
     font-weight: 700;
     color: #2c3e50;
