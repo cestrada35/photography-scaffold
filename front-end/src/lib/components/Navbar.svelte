@@ -71,9 +71,11 @@
 <nav class={`navbar ${scrolled ? 'scrolled' : ''}`}>
   <div class="site-title">
     <!-- <a href="/photography-scaffold/"> -->
-    <a href="/">
-        { $websiteName }
-    </a>
+     <a href="/">
+       <p class="text-primary">
+           { $websiteName }
+       </p>
+     </a>
   </div>
   <div class="nav-links">
     <!-- Galleries Dropdown -->
@@ -88,12 +90,12 @@
           </button>
         </div>
       {/if}
-      <a class="nav-link" href="#galleries">Galleries</a>
+      <a class="nav-link text-primary" href="#galleries">Galleries</a>
       
       {#if activeDropdown === 'galleries'}
-        <div class="dropdown-menu">
+        <div class="dropdown-menu ">
           {#each galleriesMenu as item}
-            <a href={item.href} class="dropdown-item">{item.title}</a>
+            <a href={item.href} class="dropdown-item text-primary">{item.title}</a>
           {/each}
         </div>
       {/if}
@@ -103,11 +105,11 @@
     <div class="dropdown-container"
          on:mouseenter={() => toggleDropdown('services')}
          on:mouseleave={closeDropdowns}>
-      <a class="nav-link" href="#services">Other Services</a>
+      <a class="nav-link text-primary" href="#services">Other Services</a>
       {#if activeDropdown === 'services'}
-        <div class="dropdown-menu">
+        <div class="dropdown-menu ">
           {#each servicesMenu as item}
-            <a href={item.href} class="dropdown-item">{item.title}</a>
+            <a href={item.href} class="dropdown-item text-primary">{item.title}</a>
           {/each}
         </div>
       {/if}
@@ -117,11 +119,11 @@
     <div class="dropdown-container"
          on:mouseenter={() => toggleDropdown('about')}
          on:mouseleave={closeDropdowns}>
-      <a class="nav-link" href="#about">About</a>
+      <a class="nav-link text-primary" href="#about">About</a>
       {#if activeDropdown === 'about'}
-        <div class="dropdown-menu">
+        <div class="dropdown-menu ">
           {#each aboutMenu as item}
-            <a href={item.href} class="dropdown-item">{item.title}</a>
+            <a href={item.href} class="dropdown-item text-primary">{item.title}</a>
           {/each}
         </div>
       {/if}
@@ -134,7 +136,7 @@
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.9);
+    /* background-color: rgba(255, 255, 255, 0.9); */
     padding: 15px 5%;
     display: flex;
     justify-content: space-between;
@@ -146,7 +148,7 @@
   
   .navbar.scrolled {
     padding: 10px 5%;
-    background-color: rgba(255, 255, 255, 0.97);
+    background-color: rgba(255, 240, 217, 0.85);
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
   }
   
@@ -165,7 +167,7 @@
   
   .nav-link {
     text-decoration: none;
-    color: #333;
+    /* color: #333; */
     font-size: 0.9rem;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -176,7 +178,7 @@
   }
   
   .nav-link:hover {
-    color: #888;
+    /* color: #888; */
   }
   
   .dropdown-container {
@@ -199,7 +201,7 @@
   .dropdown-item {
     display: block;
     padding: 10px 20px;
-    color: #333;
+    /* color: #333; */
     text-decoration: none;
     transition: all 0.2s ease;
     font-size: 0.9rem;
@@ -208,7 +210,7 @@
   
   .dropdown-item:hover {
     background-color: #f8f8f8;
-    color: #000;
+    /* color: #000; */
     padding-left: 25px;
   }
   

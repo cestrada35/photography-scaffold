@@ -111,7 +111,7 @@
   /* Base Styles */
   .gallery-page {
     padding-top: 80px;
-    background-color: #fafafa;
+    /* background-color: #fafafa; */
   }
 
   /* Hero Section */

@@ -8,10 +8,10 @@
   
   <div class="about-container">
     <div class="about-content">
-      <h1>About Me</h1>
+      <h1 class="text-primary">About Me</h1>
       
       <div class="about-section">
-        <div class="about-text">
+        <div class="about-text text-accent">
           <p>
             Hello, I'm { $siteOwner } and for the past 15 years, my camera has been my passport to capturing the soul of moments. My journey began with a profound personal inspiration – the fleeting, magical childhood of my son.
             It was there, amidst the everyday joys and milestones, that I truly fell in love with freezing time, transforming genuine emotions into cherished memories.
@@ -36,7 +36,7 @@
         </div>
       </div>
       
-      <div class="philosophy">
+      <div class="philosophy text-primary">
         <h2>My Photography Philosophy</h2>
         <p>
           I believe in creating images that tell stories and evoke emotions. Photography isn't just about capturing what you see, 
@@ -51,7 +51,7 @@
 <style>
   main {
     padding-top: 60px;
-    background-color: #fafafa;
+    /* background-color: #fafafa; */
   }
   
   .about-container {
@@ -76,7 +76,7 @@
     transform: translateX(-50%);
     width: 80px;
     height: 3px;
-    background-color: #333;
+    background-color: #a4a4a4;
   }
   
   .about-section {

@@ -1,19 +1,26 @@
 <script>
+	import { getWeekOfMonth } from "date-fns";
+
   export let city = "City Name Default";
   export let website_name = "Website Name Default";
   function handleBooking() {
-    alert("Booking functionality will be added soon!");
+    // alert("Booking functionality will be added soon!");
+    // window.location('/booking/')
   }
 </script>
 
 <div class="book-now-section">
   <div class="content">
-    <h1>{website_name}</h1>
-    <p>{city} photographer specializing in capturing timeless moments</p>
-    <button class="book-now-button">
-      <a href="/booking/">Book Now</a>
-      <!-- <a href="/photography-scaffold/booking/">Book Now</a> -->
-    </button>
+    <h1 class="text-primary">{website_name}</h1>
+    <p class="text-primary">{city} photographer specializing in capturing timeless moments</p>
+    <!-- <button class="book-now-button" on:click={handleBooking}> -->
+       <button class="book-now-button text-secondary">
+        <a href="/booking/">
+            Book Now
+        </a>
+        <!-- Book Now -->
+        <!-- <a href="/photography-scaffold/booking/">Book Now</a> -->
+      </button>
   </div>
 </div>
 
@@ -25,7 +32,7 @@
     align-items: center;
     padding: 100px 20px;
     position: relative;
-    background: linear-gradient(to bottom, #f9f9f9 0%, #ffffff 100%);
+    /* background: linear-gradient(to bottom, #f9f9f9 0%, #ffffff 100%); */
   }
   
   .content {
@@ -40,14 +47,14 @@
     margin-bottom: 20px;
     letter-spacing: 2px;
     font-weight: 400;
-    color: #222;
+    /* color: #222; */
     line-height: 1.2;
   }
   
   p {
     font-size: 1.3rem;
     margin: 0 auto 45px;
-    color: #555;
+    /* color: #555; */
     max-width: 600px;
     line-height: 1.7;
     font-style: italic;
@@ -55,8 +62,9 @@
   
   .book-now-button {
     background-color: transparent;
-    color: #222;
-    border: 2px solid #222;
+    /* color: #222; */
+    border: 2px solid;
+    border-radius: 5px;
     padding: 16px 55px;
     font-size: 1.1rem;
     cursor: pointer;

@@ -98,12 +98,12 @@
   <Navbar siteTitle={$websiteName} />
   
   <main class="container">
-    <h1>Book Your Session</h1>
+    <h1 class="text-primary">Book Your Session</h1>
     
     <div class="booking-grid">
       <!-- Service Selection -->
       <section class="service-selection">
-        <h2>Select Your Service</h2>
+        <h2 class="text-primary">Select Your Service</h2>
         
         <div class="rate-cards">
           <div 
@@ -111,10 +111,10 @@
             on:click={() => selectedService = 'personal'}
           >
             <h3>Personal Photography</h3>
-            <p class="rate">${rates.personal}/hour</p>
-            <p class="text-xs">Portraits, family sessions, and personal projects</p>
+            <p class="rate text-secondary">${rates.personal}/hour</p>
+            <p>Portraits, family sessions, and personal projects</p>
             <br/>
-            <p>includes: <i>25 HD edited images and 3 printed photos (8.5x11)</i></p>
+            <p class="text-sm"><i>includes: 25 HD edited images and 3 printed photos (8.5x11)</i></p>
           </div>
           
           <div 
@@ -122,8 +122,10 @@
             on:click={() => selectedService = 'event'}
           >
             <h3>Event Coverage</h3>
-            <p class="rate">${rates.event}/hour</p>
+            <p class="rate text-secondary">${rates.event}/hour</p>
             <p>Weddings, parties, and special occasions</p>
+            <br/>
+            <p class="text-sm"><i>includes: 25 HD edited images and 3 printed photos (8.5x11)</i></p>
           </div>
           
           <div 
@@ -131,24 +133,26 @@
             on:click={() => selectedService = 'commercial'}
           >
             <h3>Commercial Work</h3>
-            <p class="rate">${rates.commercial}/hour</p>
+            <p class="rate text-secondary">${rates.commercial}/hour</p>
             <p>Product shots, branding, and advertising</p>
+            <br/>
+            <p class="text-sm"><i>includes: 25 HD edited images and 3 printed photos (8.5x11)</i></p>
           </div>
         </div>
       </section>
       
       <!-- Calendar Section -->
       <section class="calendar-section">
-        <h2>Select Date</h2>
+        <h2 class="text-primary">Select Date</h2>
         <!-- <Calendar 
         {events}
         bind:selectedDate 
         /> -->
         {#if eventsLoaded}
-  <Calendar {events} bind:selectedDate />
-{:else}
-  <div>Loading calendar...</div>
-{/if}
+          <Calendar {events} bind:selectedDate />
+        {:else}
+          <div>Loading calendar...</div>
+        {/if}
         <!-- availableDates={availableDates}  -->
       </section>
 
@@ -159,11 +163,11 @@
       
       <!-- Booking Form -->
       <section class="booking-form">
-        <h2>Your Information</h2>
+        <h2 class="text-primary">Your Information</h2>
         
         <form on:submit|preventDefault={handleSubmit}>
           <div class="form-group">
-            <label for="name">Full Name</label>
+            <label for="name" class="text-secondary">Full Name</label>
             <input 
               id="name" 
               type="text" 
@@ -173,7 +177,7 @@
           </div>
           
           <div class="form-group">
-            <label for="email">Email</label>
+            <label for="email" class="text-secondary">Email</label>
             <input 
               id="email" 
               type="email" 
@@ -183,7 +187,7 @@
           </div>
           
           <div class="form-group">
-            <label for="address">
+            <label for="address" class="text-secondary">
               Address (within {serviceRadius} miles of {location})
             </label>
             <input 
@@ -195,7 +199,7 @@
           </div>
           
           <div class="form-group">
-            <label for="hours">Hours Needed</label>
+            <label for="hours" class="text-secondary">Hours Needed</label>
             <select id="hours" bind:value={hours}>
               {#each [1, 2, 3, 4, 5, 6, 7, 8] as h}
                 <option value={h}>{h} {h === 1 ? 'hour' : 'hours'}</option>
@@ -204,7 +208,7 @@
           </div>
           
           <div class="form-group">
-            <label for="notes">Special Requests</label>
+            <label for="notes" class="text-secondary">Special Requests</label>
             <textarea 
               id="notes" 
               bind:value={notes} 
@@ -225,7 +229,7 @@
 
           <!-- Payment Methods -->
         <div class="payment-methods">
-          <h3>Payment Options</h3>
+          <h3 class="text-primary">Payment Options</h3>
           <div class="payment-buttons">
             <button type="button" class="payment-btn stripe">
               <!-- <svg viewBox="0 0 28 20" class="payment-icon">
@@ -278,7 +282,7 @@
 <style>
   .booking-page {
     padding-top: 80px;
-    background-color: #f9f9f9;
+    /* background-color: #f9f9f9; */
     min-height: 100vh;
   }
   
@@ -291,14 +295,14 @@
   h1 {
     font-family: 'Playfair Display', serif;
     font-size: 2.5rem;
-    color: #2c3e50;
+    /* color: #2c3e50; */
     margin-bottom: 40px;
     text-align: center;
   }
   
   h2 {
     font-size: 1.5rem;
-    color: #2c3e50;
+    /* color: #2c3e50; */
     margin-bottom: 20px;
     font-weight: 600;
   }
@@ -354,7 +358,7 @@
   .rate {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #4a6fa5;
+    /* color: #4a6fa5; */
     margin-bottom: 15px;
   }
   
@@ -367,7 +371,7 @@
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
-    color: #4a5568;
+    /* color: #4a5568; */
   }
   
   input, select, textarea {
@@ -441,7 +445,7 @@
   .payment-methods h3 {
     font-size: 1.1rem;
     margin-bottom: 15px;
-    color: #4a5568;
+    /* color: #4a5568; */
   }
   
   .payment-buttons {

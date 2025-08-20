@@ -20,8 +20,8 @@
   <!-- Featured Gallery -->
   <section class="featured-gallery">
     <div class="section-header">
-      <h2>Featured Work</h2>
-      <p>Explore our collection of stunning photography</p>
+      <h2 class="text-primary">Featured Work</h2>
+      <p class="text-primary">Explore our collection of stunning photography</p>
     </div>
     <GalleryGrid />
   </section>
@@ -31,7 +31,7 @@
   main {
     max-width: 100vw;
     overflow-x: hidden;
-    background-color: #fafafa;
+    /* background-color: #fafafa; */
   }
   
   .hero-section {
@@ -58,13 +58,13 @@
     font-family: 'Playfair Display', serif;
     font-size: 2.5rem;
     font-weight: 700;
-    color: #2c3e50;
+    /* color: #2c3e50; */
     margin-bottom: 1rem;
   }
   
   .section-header p {
     font-size: 1.25rem;
-    color: #4a5568;
+    /* color: #4a5568; */
     font-weight: 300;
   }
   

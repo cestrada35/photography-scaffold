@@ -1,5 +1,6 @@
 <script>
   import { format, isSameDay, addMonths } from 'date-fns';
+  import '../../app.css'
   
   export let events = [];
   export let selectedDate;

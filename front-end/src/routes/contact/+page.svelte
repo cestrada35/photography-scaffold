@@ -19,10 +19,10 @@
   
   <div class="contact-container">
     <div class="contact-content">
-      <h1>Get In Touch</h1>
+      <h1 class="text-secondary">Get In Touch</h1>
       
       <div class="contact-methods">
-        <div class="contact-info">
+        <div class="contact-info text-primary">
           <h2>Contact Information</h2>
           
           <div class="info-item">
@@ -31,7 +31,7 @@
             </svg>
             <div>
               <h3>Email</h3>
-              <p>contact@photographyservices.com</p>
+              <p class="text-accent">contact@photographyservices.com</p>
             </div>
           </div>
           
@@ -41,7 +41,7 @@
             </svg>
             <div>
               <h3>Phone</h3>
-              <p>(555) 123-1234</p>
+              <p class="text-accent">(555) 123-1234</p>
             </div>
           </div>
           
@@ -84,7 +84,7 @@
 <style>
   main {
     padding-top: 60px;
-    background-color: #fafafa;
+    /* background-color: #fafafa; */
     min-height: 100vh;
   }
   
@@ -110,7 +110,8 @@
     transform: translateX(-50%);
     width: 80px;
     height: 3px;
-    background-color: #333;
+    /* background-color: #333; */
+    background-color: #a4a4a4;
   }
   
   .contact-methods {
@@ -143,7 +144,7 @@
   
   .info-item p {
     font-size: 1.1rem;
-    color: #555;
+    /* color: #555; */
   }
   
   .location-note {
