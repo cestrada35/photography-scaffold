@@ -125,7 +125,7 @@
             <p class="rate text-secondary">${rates.event}/hour</p>
             <p>Weddings, parties, and special occasions</p>
             <br/>
-            <p class="text-sm"><i>includes: 25 HD edited images and 3 printed photos (8.5x11)</i></p>
+            <p class="text-sm"><i>includes: 30 HD edited images and 5 printed photos (8.5x11)</i></p>
           </div>
           
           <div 
@@ -136,7 +136,7 @@
             <p class="rate text-secondary">${rates.commercial}/hour</p>
             <p>Product shots, branding, and advertising</p>
             <br/>
-            <p class="text-sm"><i>includes: 25 HD edited images and 3 printed photos (8.5x11)</i></p>
+            <p class="text-sm"><i>includes: 30 HD edited images and 5 printed photos (8.5x11)</i></p>
           </div>
         </div>
       </section>
