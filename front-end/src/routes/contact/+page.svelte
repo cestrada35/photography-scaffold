@@ -19,7 +19,7 @@
   
   <div class="contact-container">
     <div class="contact-content">
-      <h1 class="text-secondary">Get In Touch</h1>
+      <h1 class="text-primary">Get In Touch</h1>
       
       <div class="contact-methods">
         <div class="contact-info text-primary">
@@ -31,7 +31,7 @@
             </svg>
             <div>
               <h3>Email</h3>
-              <p class="text-accent">contact@photographyservices.com</p>
+              <p class="text-primary">contact@photographyservices.com</p>
             </div>
           </div>
           
@@ -41,7 +41,7 @@
             </svg>
             <div>
               <h3>Phone</h3>
-              <p class="text-accent">(555) 123-1234</p>
+              <p class="text-primary">(555) 123-1234</p>
             </div>
           </div>
           

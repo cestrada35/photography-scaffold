@@ -153,7 +153,7 @@
             on:click={() => selectedService = 'personal'}
           >
             <h3>Personal Photography</h3>
-            <p class="rate text-secondary">${rates.personal}/hour</p>
+            <p class="rate text-primary">${rates.personal}/hour</p>
             <p>Portraits, family sessions, and personal projects</p>
             <br/>
             <p class="text-sm"><i>includes: 25 HD edited images and 3 printed photos (8.5x11)</i></p>
@@ -164,7 +164,7 @@
             on:click={() => selectedService = 'event'}
           >
             <h3>Event Coverage</h3>
-            <p class="rate text-secondary">${rates.event}/hour</p>
+            <p class="rate text-primary">${rates.event}/hour</p>
             <p>Weddings, parties, and special occasions</p>
             <br/>
             <p class="text-sm"><i>includes: 30 HD edited images and 5 printed photos (8.5x11)</i></p>
@@ -175,7 +175,7 @@
             on:click={() => selectedService = 'commercial'}
           >
             <h3>Commercial Work</h3>
-            <p class="rate text-secondary">${rates.commercial}/hour</p>
+            <p class="rate text-primary">${rates.commercial}/hour</p>
             <p>Product shots, branding, and advertising</p>
             <br/>
             <p class="text-sm"><i>includes: 30 HD edited images and 5 printed photos (8.5x11)</i></p>
@@ -218,30 +218,32 @@
         
         <form on:submit|preventDefault={handleSubmit}>
           <div class="form-group">
-            <label for="name" class="text-secondary">Full Name *</label>
+            <label for="name" class="text-primary">Full Name *</label>
             <input 
               id="name" 
               type="text" 
               bind:value={name} 
               required
               disabled={isSubmitting}
+              class="text-secondary"
             />
           </div>
           
           <div class="form-group">
-            <label for="email" class="text-secondary">Email *</label>
+            <label for="email" class="text-primary">Email *</label>
             <input 
               id="email" 
               type="email" 
               bind:value={email} 
               required
               disabled={isSubmitting}
+              class="text-secondary"
             />
           </div>
           
           <div class="form-group">
-            <label for="hours" class="text-secondary">Hours Needed</label>
-            <select id="hours" bind:value={hours} disabled={isSubmitting}>
+            <label for="hours" class="text-primary">Hours Needed</label>
+            <select id="hours" bind:value={hours} disabled={isSubmitting} class="text-secondary">
               {#each [1, 2, 3, 4, 5, 6, 7, 8] as h}
                 <option value={h}>{h} {h === 1 ? 'hour' : 'hours'}</option>
               {/each}
@@ -249,12 +251,13 @@
           </div>
           
           <div class="form-group">
-            <label for="notes" class="text-secondary">Special Requests</label>
+            <label for="notes" class="text-primary">Special Requests</label>
             <textarea 
               id="notes" 
               bind:value={notes} 
               rows="3"
               disabled={isSubmitting}
+              class="text-secondary"
             ></textarea>
           </div>
           

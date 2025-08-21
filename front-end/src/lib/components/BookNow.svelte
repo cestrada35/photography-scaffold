@@ -14,7 +14,7 @@
     <h1 class="text-primary">{website_name}</h1>
     <p class="text-primary">{city} photographer specializing in capturing timeless moments</p>
     <!-- <button class="book-now-button" on:click={handleBooking}> -->
-       <button class="book-now-button text-secondary">
+       <button class="book-now-button text-primary">
         <a href="/booking/">
             Book Now
         </a>

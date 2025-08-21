@@ -1,5 +1,5 @@
-// src/routes/api/reservations/add/+server.js
 import { query } from '$lib/db';
+import { sendReservationEmail } from '$lib/email';
 
 export async function POST({ request }) {
   try {
@@ -16,7 +16,7 @@ export async function POST({ request }) {
     
     // First check if the date is already booked
     const existingEvents = await query(
-      'SELECT id FROM events WHERE event_date = ?',
+      'SELECT id FROM events WHERE event_date = ? AND status = "confirmed"',
       [event_date]
     );
     
@@ -30,15 +30,31 @@ export async function POST({ request }) {
     }
     
     // Insert the new reservation
-    await query(
+    const result = await query(
       `INSERT INTO events 
        (title, event_date, customer_name, customer_email, service_type, hours, notes, status) 
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [title, event_date, customer_name, customer_email, service_type, hours, notes, status || 'pending']
     );
     
+    
+    // Send email notification
+    const reservationId = result.insertId;
+    await sendReservationEmail({
+      id: reservationId,
+      customer_name,
+      customer_email,
+      service_type,
+      event_date,
+      hours,
+      notes
+    });
+    
     return new Response(
-      JSON.stringify({ success: true, message: 'Reservation created successfully' }), 
+      JSON.stringify({ 
+        success: true, 
+        message: 'Reservation created successfully. We will contact you to confirm.' 
+      }), 
       { status: 201 }
     );
   } catch (error) {

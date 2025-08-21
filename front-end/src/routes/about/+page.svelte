@@ -11,7 +11,7 @@
       <h1 class="text-primary">About Me</h1>
       
       <div class="about-section">
-        <div class="about-text text-accent">
+        <div class="about-text text-primary">
           <p>
             Hello, I'm { $siteOwner } and for the past 15 years, my camera has been my passport to capturing the soul of moments. My journey began with a profound personal inspiration – the fleeting, magical childhood of my son.
             It was there, amidst the everyday joys and milestones, that I truly fell in love with freezing time, transforming genuine emotions into cherished memories.
