@@ -53,7 +53,7 @@ export async function sendReservationEmail(reservationDetails) {
   
   try {
     await transporter.sendMail(mailOptions);
-    console.log('Notification email sent');
+    // console.log('Notification email sent');
     return true;
   } catch (error) {
     console.error('Error sending email:', error);
