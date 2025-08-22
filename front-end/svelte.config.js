@@ -10,7 +10,7 @@ const config = {
     adapter: adapter({
       pages: 'build',
       assets: 'build',
-      fallback: 'index.html',
+      fallback: 'index.js',
       precompress: false
     }),
     paths: {
