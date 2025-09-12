@@ -15,11 +15,9 @@
     <p class="text-primary">{city} photographer specializing in capturing timeless moments</p>
     <!-- <button class="book-now-button" on:click={handleBooking}> -->
        <button class="book-now-button text-primary">
-        <a href="/booking/">
+        <a href="/booking/" style="display: inline-block;" class="py-2 px-4" >
             Book Now
         </a>
-        <!-- Book Now -->
-        <!-- <a href="/photography-scaffold/booking/">Book Now</a> -->
       </button>
   </div>
 </div>
@@ -62,10 +60,9 @@
   
   .book-now-button {
     background-color: transparent;
-    /* color: #222; */
     border: 2px solid;
     border-radius: 5px;
-    padding: 16px 55px;
+    /* padding: 16px 55px; */
     font-size: 1.1rem;
     cursor: pointer;
     transition: all 0.4s ease;
@@ -75,6 +72,11 @@
     overflow: hidden;
     z-index: 1;
     font-weight: 500;
+    /* position: relative; */
+    /* padding: 0; */
+    /* overflow: hidden; */
+    /* padding: 14px 40px; */
+    font-size: 1rem;
   }
   
   .book-now-button::before {
@@ -84,14 +86,14 @@
     left: 0;
     width: 100%;
     height: 0;
-    background-color: #222;
+    background-color: #f0f0f0;
     z-index: -1;
     transition: height 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
   }
   
   .book-now-button:hover {
-    color: white;
-    border-color: #222;
+    color: rgb(0, 0, 0);
+    border-color: #222222b3;
   }
   
   .book-now-button:hover::before {
@@ -112,9 +114,17 @@
       margin-bottom: 35px;
     }
     
-    .book-now-button {
-      padding: 14px 40px;
-      font-size: 1rem;
-    }
+    /* .book-now-button a {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      border: 1px solid green;
+    } */
   }
 </style>

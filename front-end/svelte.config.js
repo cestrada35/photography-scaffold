@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-static';
+import adapter from '@sveltejs/adapter-node'; // ✅ Changed from adapter-static
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 const dev = process.argv.includes('dev');
@@ -7,15 +7,9 @@ const dev = process.argv.includes('dev');
 const config = {
   preprocess: vitePreprocess(),
   kit: {
-    adapter: adapter({
-      pages: 'build',
-      assets: 'build',
-      fallback: 'index.js',
-      precompress: false
-    }),
+    adapter: adapter(), // ✅ Simplified adapter config
     paths: {
-      base: dev ? '' : '' // Replacing with empty string for live site setup
-      // base: dev ? '' : '/photography-scaffold'
+      base: dev ? '' : ''
     },
     alias: {
       $stores: 'src/lib/stores'

@@ -1,5 +1,3 @@
-
-
 <script>
   import { galleryImages, galleryImageDescriptions, galleryImageCategories } from '../utils/images.js';
   import { onMount } from 'svelte';
@@ -7,47 +5,62 @@
   // Animation state
   let loaded = false;
 
-  // Arbirary limit
-  const galleryLimit = 9;
+  // Export prop to accept specific filenames array, currently order does not matter
+  export let specificFilenames = [
+    'photo6.jpg',
+    'photo4.jpg',
+    'photo10.jpg',
+
+    // 'photo12.jpg',
+    'photo14.jpg',
+    'photo20.jpg',
+    // 'photo27.jpg',
+    'photo29.jpg',
+    'photo30.jpg',
+    'photo33.jpg',
+    'photo35.jpg'
+  ];
   
   onMount(() => {
     loaded = true;
   });
   
   // Combine images with metadata
-  $: galleryItems = galleryImages.map((image, index) => ({
-    filename: image,
-    description: galleryImageDescriptions[index] || '',
-    category: galleryImageCategories[index] || 'other'
-  }));
+  $: galleryItems = galleryImages
+    .map((image, index) => ({
+      filename: image,
+      description: galleryImageDescriptions[index] || '',
+      category: galleryImageCategories[index] || 'other'
+    }))
+    // Filter to only include specific filenames if provided
+    .filter(item => specificFilenames.length === 0 || specificFilenames.includes(item.filename));
+  
 </script>
 
 <div class="gallery-grid" id="gallery">
   {#each galleryItems as item, index (item.filename)}
-    {#if index < galleryLimit}
-      <div 
-        class="gallery-item" 
-        style={`--delay: ${index * 0.1}s`}
-        class:loaded={loaded}
-      >
-        <div class="image-container">
-          <img 
-            src={`/assets/gallery/${item.filename}`} 
-            alt={item.description}
-            loading="lazy"
-          />
-          <!-- <img 
-            src={`/photography-scaffold/assets/gallery/${item.filename}`} 
-            alt={item.description}
-            loading="lazy"
-          /> -->
-          <div class="image-overlay">
-            <p class="image-description">{item.description}</p>
-            <span class="image-category">{item.category}</span>
-          </div>
+    <div 
+      class="gallery-item" 
+      style={`--delay: ${index * 0.1}s`}
+      class:loaded={loaded}
+    >
+      <div class="image-container">
+        <img 
+          src={`/assets/gallery/${item.filename}`} 
+          alt={item.description}
+          loading="lazy"
+        />
+        <!-- <img 
+          src={`/photography-scaffold/assets/gallery/${item.filename}`} 
+          alt={item.description}
+          loading="lazy"
+        /> -->
+        <div class="image-overlay">
+          <p class="image-description">{item.description}</p>
+          <span class="image-category">{item.category}</span>
         </div>
       </div>
-    {/if}
+    </div>
   {/each}
 </div>
 

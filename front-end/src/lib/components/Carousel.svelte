@@ -83,11 +83,19 @@
 
 <style>
   .carousel-container {
-    height: 50vh;
+    height: 70vh;
     width: 100%;
     overflow: hidden;
     position: relative;
+    box-shadow: 0 10px 30px rgba(78, 78, 78, 0.616);
+    transform: translateY(-5px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
+
+  /* .carousel-container:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+  } */
   
   .carousel-track {
     display: flex;
