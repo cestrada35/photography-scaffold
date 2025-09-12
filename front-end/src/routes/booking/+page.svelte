@@ -271,6 +271,14 @@
               </p>
               <p>Date: {selectedDate.toLocaleDateString()}</p>
               <p class="total">Total: ${calculateTotal()}</p>
+               <!-- No Refunds Notice -->
+                <div class="refund-notice">
+                  <i class="fas fa-exclamation-circle"></i>
+                  <p>
+                    <strong>Deposit Policy:</strong> A $200 deposit is required to secure your booking. 
+                    All deposits are non-refundable after 24 hours from booking confirmation.
+                  </p>
+                </div>
             </div>
           {/if}
 
@@ -519,3 +527,4 @@
     background: #3a5a80;
   }
 </style>
+

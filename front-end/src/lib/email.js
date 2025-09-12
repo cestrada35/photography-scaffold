@@ -12,10 +12,10 @@ const transporter = nodemailer.createTransport({
 
 // Function to send reservation notification
 export async function sendReservationEmail(reservationDetails) {
-  const adminEmail = 'cestrada0098@gmail.com'; // Your email for testing
+  const adminEmail = 'xueqingqing2020@gmail.com'; // Your email for testing
   
-  const confirmLink = `${process.env.SITE_URL || 'http://localhost:5173'}/admin/confirm/${reservationDetails.id}`;
-  const rejectLink = `${process.env.SITE_URL || 'http://localhost:5173'}/admin/reject/${reservationDetails.id}`;
+  const confirmLink = `${process.env.SITE_URL || 'https://helenstudioservices.com'}/admin/confirm/${reservationDetails.id}`;
+  const rejectLink = `${process.env.SITE_URL || 'https://helenstudioservices.com'}/admin/reject/${reservationDetails.id}`;
   
   const mailOptions = {
     from: EMAIL_USER,
@@ -23,7 +23,9 @@ export async function sendReservationEmail(reservationDetails) {
     subject: `📸 New Photo Session Request: ${reservationDetails.service_type} on ${reservationDetails.event_date}`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-        <h2 style="color: #4a6fa5;">New Booking Request</h2>
+      <h1 style="color: #4a6fa5;">Helen Studio Photography</h1>
+      <h2 style="color: #4a6fa5;"><a>helenstudiophotography.com</a></h2>
+      <h2 style="color: #4a6fa5;">New Booking Request</h2>
         
         <div style="background: #f8fafd; padding: 20px; border-radius: 8px; margin: 20px 0;">
           <p><strong>Customer:</strong> ${reservationDetails.customer_name}</p>

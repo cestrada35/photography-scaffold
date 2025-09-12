@@ -1,17 +1,10 @@
-<!-- src/routes/gallery/[category]/+page.svelte -->
+
 <script>
   import Navbar from '$lib/components/Navbar.svelte';
-  import { galleryImages, galleryImageDescriptions, galleryImageCategories, coverImages } from '$lib/utils/images.js';
+  import { galleryImages, galleryImageDescriptions, galleryImageCategories } from '$lib/utils/images.js';
   import { onMount } from 'svelte';
-
-  // Hard-coded values
-  const category = 'commercial'
+  const category = 'nature'
   const heroImage = 'cover1.jpg'
-  const hiddenImages = [
-    'photo7.jpg',
-    'photo8.jpg',
-    'photo9.jpg',
-  ];
   
   // Combine images with their metadata
   $: galleryItems = galleryImages.map((image, index) => ({
@@ -42,10 +35,10 @@
 
   <!-- Hero Section -->
   <section 
-  class="hero-section" 
-  style="background-image: url('/assets/cover/{heroImage}')"
-  >
-  <!-- style="background-image: url('/photography-scaffold/assets/cover/{heroImage}')" -->
+    class="hero-section" 
+    style="background-image: url('/assets/cover/{heroImage}')"
+    >
+    <!-- style="background-image: url('/photography-scaffold/assets/cover/{heroImage}')" -->
 
 
     <!-- below is confirmed to work! -->
@@ -70,7 +63,7 @@
         {:else if category === 'event'}
           Capturing your special occasions
         {:else}
-          A collection of our finest work
+          Timeless works worth sharing
         {/if}
       </p>
     </div>
@@ -79,30 +72,28 @@
   <!-- Gallery Grid -->
   <div class="gallery-container">
     {#each filteredItems as item, index (item.filename)}
-      {#if !hiddenImages.includes(item.filename)}
-        <div 
-          class="gallery-item" 
-          style={`--delay: ${index * 0.1}s`}
-          class:loaded={loaded}
-        >
-          <div class="image-container">
-            <!-- <img 
-              src={`/photography-scaffold/assets/gallery/${item.filename}`} 
-              alt={item.description}
-              loading="lazy"
-            /> -->
-            <img 
-              src={`/assets/gallery/${item.filename}`} 
-              alt={item.description}
-              loading="lazy"
-            />
-            <div class="image-overlay">
-              <p class="image-description">{item.description}</p>
-              <span class="image-category">{item.category}</span>
-            </div>
+      <div 
+        class="gallery-item" 
+        style={`--delay: ${index * 0.1}s`}
+        class:loaded={loaded}
+      >
+        <div class="image-container">
+          <!-- <img 
+            src={`/photography-scaffold/assets/gallery/${item.filename}`} 
+            alt={item.description}
+            loading="lazy"
+          /> -->
+          <img 
+            src={`/assets/gallery/${item.filename}`} 
+            alt={item.description}
+            loading="lazy"
+          />
+          <div class="image-overlay">
+            <p class="image-description">{item.description}</p>
+            <span class="image-category">{item.category}</span>
           </div>
         </div>
-      {/if}
+      </div>
     {/each}
   </div>
 
@@ -120,12 +111,24 @@
 </main>
 
 <style>
-  
+  /* Base Styles */
   .gallery-page {
     padding-top: 80px;
+    /* background-color: #fafafa; */
   }
 
-  .hero-section {
+  /* Hero Section */
+  /* .hero-section {
+    height: 60vh;
+    min-height: 500px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  } */
+   .hero-section {
     height: 60vh;
     min-height: 500px;
     display: flex;
@@ -133,11 +136,23 @@
     justify-content: center;
     position: relative;
     overflow: hidden;
+    /* Critical background properties */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    /* Fallback color */
     background-color: #f5f7fa;
   }
+/* 
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+  } */
 
   .hero-section::before {
     content: '';
@@ -146,9 +161,10 @@
     left: 0;
     width: 100%;
     height: 100%;
+    /* background: rgba(255,255,255,0.3); */
   }
 
-   .hero-content {
+  .hero-content {
     position: absolute;
     top: 40px; /* Adjust this value to control distance from top */
     left: 0;
@@ -342,6 +358,3 @@
     }
   }
 </style>
-
-
-<!-- TODO:  -->

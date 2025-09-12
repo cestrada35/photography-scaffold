@@ -16,6 +16,9 @@
   
   <!-- Book Now Section -->
   <BookNow city="Los Angeles" website_name={$websiteName} />
+
+
+  <!-- <div class="divider divider-primary"></div> -->
   
   <!-- Featured Gallery -->
   <section class="featured-gallery">

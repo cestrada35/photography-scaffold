@@ -1,65 +1,110 @@
 <script>
-  import { websiteName } from '$stores/appStore.js';
   import { onMount } from 'svelte';
+  import { writable } from 'svelte/store';
+  import { websiteName } from '$stores/appStore.js';
+  
+  // Create a store for the current language
+  export const currentLang = writable('en');
 
 
-  // import '$stores/appStore.js'
+  
+  // Reactive variables
   let scrolled = false;
   let activeDropdown = null;
-  let showGalleryTooltip = true; // Controls tooltip visibility
+  let dropdownTimeout = null;
+  let hoveredDropdown = null;
   
-  // Dropdown menu items
-  const galleriesMenu = [
-    { title: "Commercial", href: "/gallery/commercial" },
-    { title: "Personal", href: "/gallery/personal" },
-    { title: "Events", href: "/gallery/events" }
-    // { title: "Commercial", href: "/photography-scaffold/gallery/commercial" },
-    // { title: "Personal", href: "/photography-scaffold/gallery/personal" },
-    // { title: "Events", href: "/photography-scaffold/gallery/events" }
-  ];
+  // Language-specific content
+  const content = {
+    en: {
+      websiteName: $websiteName,
+      galleries: "Galleries",
+      commercial: "Commercial",
+      personal: "Personal",
+      events: "Events",
+      nature: "Nature",
+      services: "Other Services",
+      catering: "Helen's Studio Kitchen",
+      store: "Online Store",
+      about: "About",
+      aboutMe: "About Me",
+      contact: "Contact",
+      bookNow: "Book Now",
+      toggleLabel: "切换至中文"
+    },
+    zh: {
+      websiteName: $websiteName, // Kept in English for now...
+      galleries: "作品集",
+      commercial: "商业摄影",
+      personal: "个人摄影",
+      events: "活动摄影",
+      nature: "自然摄影",
+      services: "其他服务",
+      catering: "餐饮服务",
+      store: "在线商店",
+      about: "关于我们",
+      aboutMe: "关于我",
+      contact: "联络我们",
+      bookNow: "立即预订",
+      toggleLabel: "Switch to English"
+    }
+  };
   
-  const aboutMenu = [
-    { title: "About Me", href: "/about" },
-    { title: "Contact", href: "/contact" }
-    // { title: "About Me", href: "/photography-scaffold/about" },
-    // { title: "Contact", href: "/photography-scaffold/contact" }
-  ];
+  // Dropdown menu items - will be reactive based on language
+  let galleriesMenu = [];
+  let aboutMenu = [];
+  let servicesMenu = [];
   
-  const servicesMenu = [
-    { title: "Catering Services", href: "/services/catering" },
-    { title: "Online Store", href: "/services/store" }
-    // { title: "Video Editing", href: "/services/video-editing" },
-    // { title: "Tutoring Services", href: "/services/tutoring" },
-    // { title: "Design", href: "/services/design" }
-  ];
+  // Update menus when language changes
+  currentLang.subscribe(lang => {
+    galleriesMenu = [
+      { title: content[lang].commercial, href: "/gallery/commercial" },
+      { title: content[lang].personal, href: "/gallery/personal" },
+      { title: content[lang].events, href: "/gallery/events" },
+      { title: content[lang].nature, href: "/gallery/nature" }
+    ];
+    
+    aboutMenu = [
+      { title: content[lang].aboutMe, href: "/about" },
+      { title: content[lang].contact, href: "/contact" }
+    ];
+    
+    servicesMenu = [
+      { title: content[lang].catering, href: "/services/catering" },
+      { title: content[lang].store, href: "/services/store" }
+    ];
+  });
   
-  // Toggle dropdowns
-  function toggleDropdown(menu) {
-    if (activeDropdown === menu) {
-      activeDropdown = null;
-    } else {
-      activeDropdown = menu;
+  // Open dropdown immediately on hover
+  function openDropdown(menu) {
+    clearTimeout(dropdownTimeout);
+    activeDropdown = menu;
+    hoveredDropdown = menu;
+  }
+  
+  // Close dropdown with slight delay
+  function closeDropdown(menu) {
+    if (hoveredDropdown === menu) {
+      dropdownTimeout = setTimeout(() => {
+        if (hoveredDropdown === menu) {
+          activeDropdown = null;
+          hoveredDropdown = null;
+        }
+      }, 150);
     }
   }
   
-  function closeDropdowns() {
-    activeDropdown = null;
+  // Cancel closing if re-entering any dropdown area
+  function cancelClose() {
+    clearTimeout(dropdownTimeout);
   }
   
-  
-  function dismissTooltip() {
-    showGalleryTooltip = false;
-    // Optional: Store dismissal in localStorage
-    if (typeof localStorage !== 'undefined') {
-      localStorage.setItem('galleryTooltipDismissed', 'true');
-    }
+  // Toggle language function
+  function toggleLanguage() {
+    currentLang.update(lang => lang === 'en' ? 'zh' : 'en');
   }
   
   onMount(() => {
-     // Check if tooltip was previously dismissed
-    // if (typeof localStorage !== 'undefined') {
-    //   showGalleryTooltip = !localStorage.getItem('galleryTooltipDismissed');
-    // }
     const handleScroll = () => {
       scrolled = window.scrollY > 20;
     };
@@ -69,201 +114,123 @@
   });
 </script>
 
-<nav class={`navbar ${scrolled ? 'scrolled' : ''}`}>
-  <div class="site-title">
-    <!-- <a href="/photography-scaffold/"> -->
-     <a href="/">
-       <p class="text-primary">
-           { $websiteName }
-       </p>
-     </a>
+<div class="navbar bg-base-100 shadow-sm fixed top-0 z-50 transition-all duration-300 {scrolled ? 'py-2 bg-opacity-95' : 'py-4'}">
+  <div class="flex-1">
+    <a href="/" class="btn btn-ghost text-3xl text-primary">{$currentLang === 'en' ? content.en.websiteName : content.zh.websiteName}</a>
   </div>
-  <div class="nav-links">
-    <!-- Galleries Dropdown -->
-    <div class="dropdown-container relative"
-         on:mouseenter={() => toggleDropdown('galleries')}
-         on:mouseleave={closeDropdowns}>
-      {#if showGalleryTooltip}
-        <div class="gallery-tooltip" on:click|stopPropagation={dismissTooltip}>
-          <span>✨ Explore our work here! ✨ ➜</span>
-          <button class="tooltip-close" on:click|stopPropagation={dismissTooltip}>
-            ✕
-          </button>
-        </div>
-      {/if}
-      <a class="nav-link text-primary" href="#galleries">Galleries</a>
+  <div class="flex-none">
+    <ul class="menu menu-horizontal px-1 gap-1">
       
-      {#if activeDropdown === 'galleries'}
-        <div class="dropdown-menu ">
-          {#each galleriesMenu as item}
-            <a href={item.href} class="dropdown-item text-primary">{item.title}</a>
-          {/each}
+      <!-- Galleries Dropdown -->
+      <li>
+        <div 
+          class="dropdown-container relative py-2 px-3 rounded-lg transition-colors {activeDropdown === 'galleries' ? 'bg-base-200' : ''}"
+          on:mouseenter={() => openDropdown('galleries')}
+          on:mouseleave={() => closeDropdown('galleries')}>
+          <a class="text-primary cursor-pointer text-xl">
+            {$currentLang === 'en' ? content.en.galleries : content.zh.galleries}
+          </a>
+          
+          {#if activeDropdown === 'galleries'}
+            <div 
+              class="dropdown-menu bg-base-100 rounded-box p-2 z-50 shadow-lg border border-base-300"
+              on:mouseenter={cancelClose}
+              on:mouseleave={() => closeDropdown('galleries')}>
+              {#each galleriesMenu as item}
+                <a href={item.href} class="dropdown-item text-primary hover:bg-primary/10 block px-4 py-2 rounded-md transition-colors">{item.title}</a>
+              {/each}
+            </div>
+          {/if}
         </div>
-      {/if}
-    </div>
-    
-    <!-- Other Services Dropdown -->
-    <div class="dropdown-container"
-         on:mouseenter={() => toggleDropdown('services')}
-         on:mouseleave={closeDropdowns}>
-      <a class="nav-link text-primary" href="#services">Other Services</a>
-      {#if activeDropdown === 'services'}
-        <div class="dropdown-menu ">
-          {#each servicesMenu as item}
-            <a href={item.href} class="dropdown-item text-primary">{item.title}</a>
-          {/each}
+      </li>
+      
+      <!-- Services Dropdown -->
+      <li>
+        <div 
+          class="dropdown-container relative py-2 px-3 rounded-lg transition-colors {activeDropdown === 'services' ? 'bg-base-200' : ''}"
+          on:mouseenter={() => openDropdown('services')}
+          on:mouseleave={() => closeDropdown('services')}>
+          <a class="text-primary cursor-pointer text-xl">
+            {$currentLang === 'en' ? content.en.services : content.zh.services}
+          </a>
+          
+          {#if activeDropdown === 'services'}
+            <div 
+              class="dropdown-menu bg-base-100 rounded-box p-2 z-50 shadow-lg border border-base-300"
+              on:mouseenter={cancelClose}
+              on:mouseleave={() => closeDropdown('services')}>
+              {#each servicesMenu as item}
+                <a href={item.href} class="dropdown-item text-primary hover:bg-primary/10 block px-4 py-2 rounded-md transition-colors">{item.title}</a>
+              {/each}
+            </div>
+          {/if}
         </div>
-      {/if}
-    </div>
-    
-    <!-- About Dropdown -->
-    <div class="dropdown-container"
-         on:mouseenter={() => toggleDropdown('about')}
-         on:mouseleave={closeDropdowns}>
-      <a class="nav-link text-primary" href="#about">About</a>
-      {#if activeDropdown === 'about'}
-        <div class="dropdown-menu ">
-          {#each aboutMenu as item}
-            <a href={item.href} class="dropdown-item text-primary">{item.title}</a>
-          {/each}
+      </li>
+      
+      <!-- About Dropdown -->
+      <li>
+        <div 
+          class="dropdown-container relative py-2 px-3 rounded-lg transition-colors {activeDropdown === 'about' ? 'bg-base-200' : ''}"
+          on:mouseenter={() => openDropdown('about')}
+          on:mouseleave={() => closeDropdown('about')}>
+          <a class="text-primary cursor-pointer text-xl">
+            {$currentLang === 'en' ? content.en.about : content.zh.about}
+          </a>
+          
+          {#if activeDropdown === 'about'}
+            <div 
+              class="dropdown-menu bg-base-100 rounded-box p-2 z-50 shadow-lg border border-base-300"
+              on:mouseenter={cancelClose}
+              on:mouseleave={() => closeDropdown('about')}>
+              {#each aboutMenu as item}
+                <a href={item.href} class="dropdown-item text-primary hover:bg-primary/10 block px-4 py-2 rounded-md transition-colors">{item.title}</a>
+              {/each}
+            </div>
+          {/if}
         </div>
-      {/if}
-    </div>
+      </li>
+      
+      <!-- Contact Button -->
+      <li>
+        <a class="btn btn-primary ml-2" href="/booking/">
+          {$currentLang === 'en' ? content.en.bookNow : content.zh.bookNow}
+        </a>
+      </li>
+    </ul>
   </div>
-</nav>
+  <div class="ml-6">
+    <!-- Language Control -->
+    <label class="label text-primary text-xs cursor-pointer">
+      <span class="label-text mr-2">
+        {$currentLang === 'en' ? content.en.toggleLabel : content.zh.toggleLabel}
+      </span> 
+      <input type="checkbox" class="toggle toggle-primary" on:change={toggleLanguage} checked={$currentLang === 'zh'}/>
+    </label>
+  </div>
+</div>
 
 <style>
   .navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    /* background-color: rgba(255, 255, 255, 0.9); */
-    padding: 15px 5%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 1000;
+    padding: 0 5%;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  }
-  
-  .navbar.scrolled {
-    padding: 10px 5%;
-    background-color: rgba(58, 58, 58, 0.612);
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-  }
-  
-  .site-title {
-    /* font-family: 'Playfair Display', serif; */
-    font-size: 1.8rem;
-    letter-spacing: 1px;
-    font-weight: 500;
-  }
-  
-  .nav-links {
-    display: flex;
-    gap: 30px;
-    position: relative;
-  }
-  
-  .nav-link {
-    text-decoration: none;
-    /* color: #333; */
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    position: relative;
-    padding-bottom: 5px;
-    transition: color 0.3s ease;
-    cursor: pointer;
-  }
-  
-  .nav-link:hover {
-    /* color: #888; */
+    backdrop-filter: blur(8px);
   }
   
   .dropdown-container {
-    position: relative;
+    display: flex;
+    align-items: center;
   }
   
   .dropdown-menu {
     position: absolute;
     top: 100%;
     left: 0;
-    background-color: white;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-    padding: 10px 0;
     min-width: 200px;
-    z-index: 1001;
-    animation: fadeIn 0.3s ease;
-  }
-  
-  .dropdown-item {
-    display: block;
-    padding: 10px 20px;
-    /* color: #333; */
-    text-decoration: none;
-    transition: all 0.2s ease;
-    font-size: 0.9rem;
-    text-transform: none;
-  }
-  
-  .dropdown-item:hover {
-    background-color: #f8f8f8;
-    /* color: #000; */
-    padding-left: 25px;
+    animation: fadeIn 0.15s ease;
   }
   
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
+    from { opacity: 0; transform: translateY(-8px); }
     to { opacity: 1; transform: translateY(0); }
-  }
-  
-  @media (max-width: 768px) {
-    .nav-links {
-      gap: 15px;
-    }
-    
-    .site-title {
-      font-size: 1.5rem;
-    }
-    
-    .nav-link {
-      font-size: 0.8rem;
-    }
-    
-    .dropdown-menu {
-      min-width: 160px;
-    }
-  }
-
-  .gallery-tooltip {
-    position: absolute;
-    top: -6px;
-    left: -170%;
-    transform: translateX(-50%);
-    background: linear-gradient(135deg, #56fff4 0%, #fb76d7 100%);
-    color: #5a3d1a;
-    padding: 8px 16px;
-    border-radius: 20px;
-    height: 35px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    white-space: nowrap;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: default;
-    z-index: 1002;
-    animation: float 3s ease-in-out infinite;
-  }
-  
-  .gallery-tooltip::after {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    left: 50%;
   }
 </style>

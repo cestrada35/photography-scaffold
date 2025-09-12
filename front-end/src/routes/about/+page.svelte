@@ -87,6 +87,8 @@
   
   .about-text {
     flex: 1;
+    /* border: 2px solid red; */
+    align-content: space-around;
   }
   
   .about-text p {
@@ -97,6 +99,7 @@
   
   .about-image {
     flex: 1;
+    /* border: 2px solid rgb(0, 174, 255); */
     border-radius: 4px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);

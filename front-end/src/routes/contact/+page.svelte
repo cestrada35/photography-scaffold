@@ -31,7 +31,7 @@
             </svg>
             <div>
               <h3>Email</h3>
-              <p class="text-primary">contact@photographyservices.com</p>
+              <p class="text-primary">xueqingqing2020@gmail.com</p>
             </div>
           </div>
           
@@ -41,7 +41,7 @@
             </svg>
             <div>
               <h3>Phone</h3>
-              <p class="text-primary">(555) 123-1234</p>
+              <p class="text-primary">(626) 487-9145</p>
             </div>
           </div>
           

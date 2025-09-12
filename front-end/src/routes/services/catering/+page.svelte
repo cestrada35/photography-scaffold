@@ -1,51 +1,34 @@
 <script>
   import { onMount } from 'svelte';
+  import { foodImages, foodLabels, foodPrices } from '../../../lib/utils/images.js';
   
-  // Food items data
-  const foodItems = [
-    {
-      id: 1,
-      name: "Gourmet Burger",
-      description: "Juicy beef patty with fresh vegetables and special sauce",
-      price: 12.99,
-      image: "https://images.unsplash.com/photo-1553979459-d2229ba7433b?w=400&h=300&fit=crop"
-    },
-    {
-      id: 2,
-      name: "Margherita Pizza",
-      description: "Classic pizza with tomato sauce, mozzarella, and basil",
-      price: 14.99,
-      image: "https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?w=400&h=300&fit=crop"
-    },
-    {
-      id: 3,
-      name: "Caesar Salad",
-      description: "Crisp romaine lettuce with parmesan, croutons, and Caesar dressing",
-      price: 9.99,
-      image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=400&h=300&fit=crop"
-    },
-    {
-      id: 4,
-      name: "Grilled Salmon",
-      description: "Fresh salmon fillet with lemon butter sauce and seasonal vegetables",
-      price: 18.99,
-      image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=400&h=300&fit=crop"
-    },
-    {
-      id: 5,
-      name: "Chocolate Lava Cake",
-      description: "Warm chocolate cake with a molten center, served with vanilla ice cream",
-      price: 7.99,
-      image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=300&fit=crop"
-    },
-    {
-      id: 6,
-      name: "Fresh Lemonade",
-      description: "Homemade lemonade with a hint of mint",
-      price: 3.99,
-      image: "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=400&h=300&fit=crop"
+  // Generate food items dynamically from the imported arrays
+  const foodItems = foodImages.map((image, index) => {
+    // Use placeholder data if arrays are shorter than expected
+    const name = foodLabels[index] || `Food Item ${index + 1}`;
+    const price = foodPrices[index] ? parseFloat(foodPrices[index]) : (9.99 + index);
+    const imagePath = `/assets/foods/${image}`;
+    
+    return {
+      id: index + 1,
+      name: name,
+      price: price,
+      image: imagePath
+    };
+  });
+  
+  // Add placeholder items if needed to maintain the 6-item layout
+  const totalItemsNeeded = 6;
+  if (foodItems.length < totalItemsNeeded) {
+    for (let i = foodItems.length; i < totalItemsNeeded; i++) {
+      foodItems.push({
+        id: i + 1,
+        name: `Special Item ${i + 1}`,
+        price: 12.99 + i,
+        image: "/assets/foods/placeholder.jpg"
+      });
     }
-  ];
+  }
   
   // Cart functionality
   let cart = [];
@@ -94,7 +77,8 @@
   <!-- Header -->
   <div class="text-center mb-12">
     <h1 class="text-4xl font-bold text-primary mb-4">Helen's Studio Kitchen</h1>
-    <p class="text-lg text-gray-300">Select your favorites and place your order</p>
+    <p class="text-xl text-gray-300">Select your favorites and place your order</p>
+    <p class="mt-2 text-lg text-gray-300">Call to place your order or deliver within 5 miles of the Los Angeles area</p>
   </div>
   
   <!-- Main content -->
@@ -116,7 +100,6 @@
                 <h2 class="card-title text-primary">{item.name}</h2>
                 <span class="text-xl font-bold text-primary">${item.price.toFixed(2)}</span>
               </div>
-              <p class="text-gray-600 mb-4">{item.description}</p>
               <div class="card-actions justify-end">
                 <button 
                   class="btn btn-primary text-info"
@@ -172,13 +155,9 @@
                       Call to confirm your order:
                     </p>
                     <p class="text-center text-2xl font-bold text-primary mt-2">
-                      123-123-1234
+                      626-487-9145
                     </p>
                   </div>
-                  
-                  <!-- <button class="btn btn-primary btn-block">
-                    Checkout (${total.toFixed(2)})
-                  </button> -->
                 </div>
               {:else}
                 <p class="text-center py-8 text-gray-500">Your cart is empty</p>
@@ -227,4 +206,4 @@
   .overflow-y-auto::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
-</style> 
+</style>
