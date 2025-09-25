@@ -190,7 +190,7 @@ export const foodLabels = [
   'Water-Boiled Fish',
   'Pan-Fried Wagyu Steak',
   'Seafood Spaghetti',
-  'BBQ Qual',
+  'BBQ Quail',
   'Spaghetti and Meatballs',
   'Stir-Fied Clams',
   'Scallop Spaghetti', //32
@@ -202,8 +202,8 @@ export const foodLabels = [
   'Cheesecake #1 8"',
   'Cheesecake #2 8"',
   'Cheesecake #3 6"',
-  'food16.jpg',
-  'food19.jpg',
+  'Red Bean Shaved Ice', // Add note (+ toppings)
+  'BBQ Lamb Chop',
 ];
 
 export const foodPrices = [
@@ -226,6 +226,6 @@ export const foodPrices = [
   '60',
   '65',
   '55',
-  '3.99',
-  '2.99',
+  '8',
+  '32',
 ];
