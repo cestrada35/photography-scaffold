@@ -1,18 +1,20 @@
 <script>
   import { onMount } from 'svelte';
-  import { foodImages, foodLabels, foodPrices } from '../../../lib/utils/images.js';
+  import { foodImages, foodLabels, foodPrices, foodDescriptions } from '../../../lib/utils/images.js';
   
   // Generate food items dynamically from the imported arrays
   const foodItems = foodImages.map((image, index) => {
     // Use placeholder data if arrays are shorter than expected
     const name = foodLabels[index] || `Food Item ${index + 1}`;
     const price = foodPrices[index] ? parseFloat(foodPrices[index]) : (9.99 + index);
+    const description = foodDescriptions[index] || 'Delicious item made with fresh ingredients';
     const imagePath = `/assets/foods/${image}`;
     
     return {
       id: index + 1,
       name: name,
       price: price,
+      description: description,
       image: imagePath
     };
   });
@@ -25,6 +27,7 @@
         id: i + 1,
         name: `Special Item ${i + 1}`,
         price: 12.99 + i,
+        description: 'A special creation from our kitchen',
         image: "/assets/foods/placeholder.jpg"
       });
     }
@@ -78,7 +81,7 @@
   <div class="text-center mb-12">
     <h1 class="text-4xl font-bold text-primary mb-4">Helen's Studio Kitchen</h1>
     <p class="text-xl text-gray-300">Select your favorites and place your order</p>
-    <p class="mt-2 text-lg text-gray-300">Call to place your order or deliver within 5 miles of the Los Angeles area</p>
+    <p class="mt-2 text-lg text-gray-300">Text or Call to place your order or deliver within 5 miles of the Torrance area</p>
   </div>
   
   <!-- Main content -->
@@ -96,10 +99,14 @@
               />
             </figure>
             <div class="card-body p-5 bg-white rounded-b-2xl">
-              <div class="flex justify-between items-start mb-3">
+              <div class="flex justify-between items-start mb-2">
                 <h2 class="card-title text-primary">{item.name}</h2>
                 <span class="text-xl font-bold text-primary">${item.price.toFixed(2)}</span>
               </div>
+              <!-- Added description here -->
+              <p class="text-sm text-gray-600 mb-3 leading-relaxed">
+                {item.description}
+              </p>
               <div class="card-actions justify-end">
                 <button 
                   class="btn btn-primary text-info"
@@ -121,6 +128,8 @@
           <div class="card bg-base-100 shadow-xl border border-primary/20 bg-white">
             <div class="card-body">
               <h2 class="card-title text-primary border-b pb-2">Your Order</h2>
+              <p class="text-gray-500 mb-1px">Delivery costs will vary based on location</p>
+              <p class="text-gray-500 mt-1px">(Text preferred)</p>
               
               {#if cart.length > 0}
                 <div class="max-h-96 overflow-y-auto">
@@ -152,7 +161,7 @@
                   
                   <div class="bg-primary/10 p-4 rounded-lg mb-4">
                     <p class="text-center text-primary font-bold">
-                      Call to confirm your order:
+                      Text to confirm your order:
                     </p>
                     <p class="text-center text-2xl font-bold text-primary mt-2">
                       626-487-9145
@@ -168,6 +177,8 @@
           <div class="card bg-white shadow-xl border border-primary/10">
             <div class="card-body text-center">
               <h2 class="card-title text-primary justify-center">Your Cart</h2>
+              <p class="text-gray-500 mb-1px">Delivery costs will vary based on location</p>
+              <p class="text-gray-500 mt-1px">(Text preferred)</p>
               <p class="text-gray-500">Add items from the menu to get started</p>
               <div class="mt-4 text-4xl">🛒</div>
             </div>

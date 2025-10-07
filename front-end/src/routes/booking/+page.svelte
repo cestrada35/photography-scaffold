@@ -3,106 +3,128 @@
   import Calendar from '$lib/components/Calendar.svelte';
   import { websiteName } from '$stores/appStore';
   import { onMount } from 'svelte';
-  
+  import { t } from '$stores/translationStore.js';
+  import { page } from '$app/stores';
+
   const location = "Los Angeles";
-  const serviceRadius = 10; // miles
+  const serviceRadius = 10;
   const rates = {
     personal: 260,
     event: 300,
     commercial: 350
   };
-  
 
-  // todo: 
-  // make alert a modal
-  // send email on availability
-  // if yes, we must leave event on cal (we could show reservation number on click?)
-  // else, we remove the entry from the db
-  
-  
   // Form state
   let events = [];
   let selectedDate = null;
+  let selectedStartDate = null;
+  let selectedEndDate = null;
   let selectedService = '';
   let name = '';
   let email = '';
-  let address = '';
   let hours = 2;
   let notes = '';
-  let eventsLoaded = false; // Add this flag
-    let isSubmitting = false;
-  let submitStatus = ''; // 'success', 'error', or ''
-  
-  // Mock available dates (in a real app, this would come from an API)
-  const availableDates = [
-    new Date(2023, 10, 15),
-    new Date(2023, 10, 18),
-    new Date(2023, 10, 22),
-    new Date(2023, 10, 25),
-    new Date(2023, 10, 29)
-  ];
+  let eventsLoaded = false;
+  let isSubmitting = false;
+  let submitStatus = '';
+  let isDateRangeMode = false;
 
-    async function handleSubmit() {
-    if (!selectedService || !selectedDate || !name || !email) {
-      alert('Please fill in all required fields');
+  // Check if user came from date range mode
+  $: {
+    const urlParams = new URLSearchParams($page.url.search);
+    isDateRangeMode = urlParams.get('mode') === 'range';
+  }
+
+  async function handleSubmit() {
+    if (!selectedService || !name || !email) {
+      alert($t('booking.requiredFieldsAlert'));
       return;
     }
-    
+
+    if (isDateRangeMode && (!selectedStartDate || !selectedEndDate)) {
+      alert($t('booking.selectDateRange'));
+      return;
+    }
+
+    if (!isDateRangeMode && !selectedDate) {
+      alert($t('booking.selectDate'));
+      return;
+    }
+
     isSubmitting = true;
     submitStatus = '';
-    
+
     try {
-      // Format date as YYYY-MM-DD
-      const formattedDate = selectedDate.toISOString().split('T')[0];
-      
       const reservationData = {
         title: `${selectedService} session for ${name}`,
-        event_date: formattedDate,
         customer_name: name,
         customer_email: email,
         service_type: selectedService,
         hours: hours,
         notes: notes,
-        status: 'pending' // or 'confirmed' based on your workflow
+        status: 'pending'
       };
-      
+
+      // Add date information based on mode
+      if (isDateRangeMode) {
+        reservationData.date_range = true;
+        reservationData.start_date = selectedStartDate.toISOString().split('T')[0];
+        reservationData.end_date = selectedEndDate.toISOString().split('T')[0];
+      } else {
+        reservationData.date_range = false;
+        reservationData.event_date = selectedDate.toISOString().split('T')[0];
+      }
+
       const response = await fetch('/api/reservations/add', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(reservationData)
       });
-      
+
       if (response.ok) {
         submitStatus = 'success';
         await loadEvents();
-        
-        // Show success message
-        confirmation_modal.showModal()
-        
+        confirmation_modal.showModal();
+
+        // Reset form
         name = '';
         email = '';
         hours = 2;
         notes = '';
         selectedService = '';
         selectedDate = null;
+        selectedStartDate = null;
+        selectedEndDate = null;
       } else {
         const errorData = await response.json();
         submitStatus = 'error';
-        alert(`Error: ${errorData.message || 'Failed to create reservation'}`);
+        alert($t('booking.submissionError', { error: errorData.error || $t('booking.defaultError') }));
       }
     } catch (error) {
       console.error('Submission error:', error);
       submitStatus = 'error';
-      alert('Error submitting reservation. Please try again.');
+      alert($t('booking.generalError'));
     }
-    
+
     isSubmitting = false;
   }
-  
+
   function calculateTotal() {
-    return rates[selectedService] * hours;
+    const baseRate = rates[selectedService] * hours;
+    if (isDateRangeMode && selectedStartDate && selectedEndDate) {
+      const days = Math.ceil((selectedEndDate - selectedStartDate) / (1000 * 60 * 60 * 24)) + 1;
+      return baseRate * days;
+    }
+    return baseRate;
+  }
+
+  function getDateRangeDescription() {
+    if (!isDateRangeMode || !selectedStartDate || !selectedEndDate) return '';
+
+    const days = Math.ceil((selectedEndDate - selectedStartDate) / (1000 * 60 * 60 * 24)) + 1;
+    return `${selectedStartDate.toLocaleDateString()} - ${selectedEndDate.toLocaleDateString()} (${days} ${days === 1 ? $t('booking.day') : $t('booking.days')})`;
   }
 
   async function loadEvents() {
@@ -116,97 +138,132 @@
       console.error('Error loading events:', error);
     }
   }
-  
+
   onMount(() => {
     loadEvents();
   });
-
 </script>
 
 <div class="booking-page">
   <Navbar siteTitle={$websiteName} />
-  
+
   <main class="container">
-    <h1 class="text-primary">Book Your Session</h1>
+    <h1 class="text-primary">{$t('booking.bookYourSession')}</h1>
 
     <!-- Status Messages -->
     {#if submitStatus === 'success'}
       <div class="alert success">
         <i class="fas fa-check-circle"></i>
-        Your reservation request has been submitted successfully!
+        {$t('booking.successMessage')}
       </div>
     {:else if submitStatus === 'error'}
       <div class="alert error">
         <i class="fas fa-exclamation-circle"></i>
-        There was an error submitting your reservation. Please try again.
+        {$t('booking.errorMessage')}
       </div>
     {/if}
-    
+
     <div class="booking-grid">
       <!-- Service Selection -->
       <section class="service-selection">
-        <h2 class="text-primary">Select Your Service</h2>
-        
+        <h2 class="text-primary">{$t('booking.selectService')}</h2>
+
         <div class="rate-cards">
-          <div 
+          <div
             class="rate-card {selectedService === 'personal' ? 'selected' : ''}"
             on:click={() => selectedService = 'personal'}
           >
-            <h3>Personal Photography</h3>
-            <p class="rate text-primary">${rates.personal}/hour</p>
-            <p>Portraits, family sessions, and personal projects</p>
+            <h3>{$t('booking.personalPhotography')}</h3>
+            <p class="rate text-primary">${rates.personal}/{$t('booking.hour')}</p>
+            <p>{$t('booking.personalDescription')}</p>
             <br/>
-            <p class="text-sm"><i>includes: 25 HD edited images and 3 printed photos (8.5x11)</i></p>
+            <p class="text-sm"><i>{$t('booking.personalIncludes')}</i></p>
           </div>
-          
-          <div 
+
+          <div
             class="rate-card {selectedService === 'event' ? 'selected' : ''}"
             on:click={() => selectedService = 'event'}
           >
-            <h3>Event Coverage</h3>
-            <p class="rate text-primary">${rates.event}/hour</p>
-            <p>Weddings, parties, and special occasions</p>
+            <h3>{$t('booking.eventCoverage')}</h3>
+            <p class="rate text-primary">${rates.event}/{$t('booking.hour')}</p>
+            <p>{$t('booking.eventDescription')}</p>
             <br/>
-            <p class="text-sm"><i>includes: 30 HD edited images and 5 printed photos (8.5x11)</i></p>
+            <p class="text-sm"><i>{$t('booking.eventIncludes')}</i></p>
           </div>
-          
-          <div 
+
+          <div
             class="rate-card {selectedService === 'commercial' ? 'selected' : ''}"
             on:click={() => selectedService = 'commercial'}
           >
-            <h3>Commercial Work</h3>
-            <p class="rate text-primary">${rates.commercial}/hour</p>
-            <p>Product shots, branding, and advertising</p>
+            <h3>{$t('booking.commercialWork')}</h3>
+            <p class="rate text-primary">${rates.commercial}/{$t('booking.hour')}</p>
+            <p>{$t('booking.commercialDescription')}</p>
             <br/>
-            <p class="text-sm"><i>includes: 30 HD edited images and 5 printed photos (8.5x11)</i></p>
+            <p class="text-sm"><i>{$t('booking.commercialIncludes')}</i></p>
           </div>
         </div>
       </section>
-      
+
       <!-- Calendar Section -->
       <section class="calendar-section">
-        <h2 class="text-primary">Select Date</h2>
-        {#if eventsLoaded}
-          <Calendar {events} bind:selectedDate />
+        <h2 class="text-primary">
+          {isDateRangeMode ? $t('booking.selectDateRange') : $t('booking.selectDate')}
+        </h2>
+
+        {#if isDateRangeMode}
+          <div class="date-range-inputs">
+            <div class="date-input-group">
+              <label for="start-date">{$t('bookNow.startDate')} *</label>
+              <input
+                type="date"
+                id="start-date"
+                value={selectedStartDate ? selectedStartDate.toISOString().split('T')[0] : ''}
+                on:input={(e) => selectedStartDate = e.target.value ? new Date(e.target.value) : null}
+                min={new Date().toISOString().split('T')[0]}
+              />
+            </div>
+
+            <div class="date-input-group">
+              <label for="end-date">{$t('bookNow.endDate')} *</label>
+              <input
+                type="date"
+                id="end-date"
+                value={selectedEndDate ? selectedEndDate.toISOString().split('T')[0] : ''}
+                on:input={(e) => selectedEndDate = e.target.value ? new Date(e.target.value) : null}
+                min={selectedStartDate ? selectedStartDate.toISOString().split('T')[0] : new Date().toISOString().split('T')[0]}
+              />
+            </div>
+          </div>
+
+          {#if selectedStartDate && selectedEndDate}
+            <div class="date-range-preview">
+              <p><strong>{$t('booking.selectedRange')}:</strong> {getDateRangeDescription()}</p>
+            </div>
+          {/if}
         {:else}
-          <div>Loading calendar...</div>
+          {#if eventsLoaded}
+            <Calendar {events} bind:selectedDate />
+          {:else}
+            <div>{$t('booking.loadingCalendar')}</div>
+          {/if}
         {/if}
       </section>
 
       <dialog id="confirmation_modal" class="modal">
         <div class="modal-box">
-          <h1 class="text-lg font-bold">Thank you!</h1>
+          <h1 class="text-lg font-bold">{$t('booking.thankYou')}</h1>
           <h2 class="font-bold">
             {#if submitStatus}
-              Booking request received! We'll contact you shortly at {email} to confirm your <i>{selectedService.charAt(0).toUpperCase() + selectedService.slice(1)}</i> service session on {selectedDate.toLocaleDateString()}.
+              {$t('booking.confirmationMessage', {
+                email: email,
+                service: selectedService.charAt(0).toUpperCase() + selectedService.slice(1),
+                date: isDateRangeMode ? getDateRangeDescription() : selectedDate.toLocaleDateString()
+              })}
             {/if}
-            <!-- test -->
           </h2>
-          <!-- <p class="pt-4">Press ESC key or click the button below to close</p> -->
           <div class="modal-action">
             <form method="dialog">
-              <!-- if there is a button in form, it will close the modal -->
-              <button class="btn">Close</button>
+              <button class="btn">{$t('booking.close')}</button>
             </form>
           </div>
         </div>
@@ -214,83 +271,86 @@
 
       <!-- Booking Form -->
       <section class="booking-form">
-        <h2 class="text-primary">Your Information</h2>
-        
+        <h2 class="text-primary">{$t('booking.yourInformation')}</h2>
+
         <form on:submit|preventDefault={handleSubmit}>
           <div class="form-group">
-            <label for="name" class="text-primary">Full Name *</label>
-            <input 
-              id="name" 
-              type="text" 
-              bind:value={name} 
+            <label for="name" class="text-primary">{$t('booking.fullName')} *</label>
+            <input
+              id="name"
+              type="text"
+              bind:value={name}
               required
               disabled={isSubmitting}
               class="text-secondary"
             />
           </div>
-          
+
           <div class="form-group">
-            <label for="email" class="text-primary">Email *</label>
-            <input 
-              id="email" 
-              type="email" 
-              bind:value={email} 
+            <label for="email" class="text-primary">{$t('contact.email')} *</label>
+            <input
+              id="email"
+              type="email"
+              bind:value={email}
               required
               disabled={isSubmitting}
               class="text-secondary"
             />
           </div>
-          
+
           <div class="form-group">
-            <label for="hours" class="text-primary">Hours Needed</label>
+            <label for="hours" class="text-primary">{$t('booking.hoursNeeded')}</label>
             <select id="hours" bind:value={hours} disabled={isSubmitting} class="text-secondary">
               {#each [1, 2, 3, 4, 5, 6, 7, 8] as h}
-                <option value={h}>{h} {h === 1 ? 'hour' : 'hours'}</option>
+                <option value={h}>{h} {h === 1 ? $t('booking.hour') : $t('booking.hours')}</option>
               {/each}
             </select>
           </div>
-          
+
           <div class="form-group">
-            <label for="notes" class="text-primary">Special Requests</label>
-            <textarea 
-              id="notes" 
-              bind:value={notes} 
+            <label for="notes" class="text-primary">{$t('booking.specialRequests')}</label>
+            <textarea
+              id="notes"
+              bind:value={notes}
               rows="3"
               disabled={isSubmitting}
               class="text-secondary"
             ></textarea>
           </div>
-          
-          {#if selectedService && selectedDate}
+
+          {#if selectedService && (selectedDate || (isDateRangeMode && selectedStartDate && selectedEndDate))}
             <div class="booking-summary">
-              <h3>Booking Summary</h3>
+              <h3>{$t('booking.bookingSummary')}</h3>
               <p>
-                <u>
-                  {selectedService.charAt(0).toUpperCase() + selectedService.slice(1)}
-                </u> session for {hours} {hours === 1 ? 'hour' : 'hours'}
+                <u>{selectedService.charAt(0).toUpperCase() + selectedService.slice(1)}</u>
+                {isDateRangeMode ? $t('booking.rangeSessionFor') : $t('booking.sessionFor')}
+                {hours} {hours === 1 ? $t('booking.hour') : $t('booking.hours')}
               </p>
-              <p>Date: {selectedDate.toLocaleDateString()}</p>
-              <p class="total">Total: ${calculateTotal()}</p>
-               <!-- No Refunds Notice -->
-                <div class="refund-notice">
-                  <i class="fas fa-exclamation-circle"></i>
-                  <p>
-                    <strong>Deposit Policy:</strong> A $200 deposit is required to secure your booking. 
-                    All deposits are non-refundable after 24 hours from booking confirmation.
-                  </p>
-                </div>
+              <p>
+                {isDateRangeMode ? $t('booking.dateRange') : $t('booking.date')}:
+                {isDateRangeMode ? getDateRangeDescription() : selectedDate.toLocaleDateString()}
+              </p>
+              <p class="total">{$t('booking.total')}: ${calculateTotal()}</p>
+              <div class="refund-notice">
+                <i class="fas fa-exclamation-circle"></i>
+                <p>
+                  <strong>{$t('booking.depositPolicy')}:</strong> {$t('booking.depositText')}
+                </p>
+              </div>
             </div>
           {/if}
 
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             class="submit-btn"
-            disabled={!selectedService || !selectedDate || !name || !email || isSubmitting}
+            disabled={!selectedService || !name || !email || isSubmitting ||
+                     (!isDateRangeMode && !selectedDate) ||
+                     (isDateRangeMode && (!selectedStartDate || !selectedEndDate))}
           >
             {#if isSubmitting}
-              <i class="fas fa-spinner fa-spin"></i> Processing...
+              <i class="fas fa-spinner fa-spin"></i> {$t('booking.processing')}
             {:else}
-              Request Reservation
+              {$t('booking.requestReservation')}
             {/if}
           </button>
         </form>
@@ -302,54 +362,50 @@
 <style>
   .booking-page {
     padding-top: 80px;
-    /* background-color: #f9f9f9; */
     min-height: 100vh;
   }
-  
+
   .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 40px 20px;
   }
-  
+
   h1 {
-    /* font-family: 'Playfair Display', serif; */
     font-size: 2.5rem;
-    /* color: #2c3e50; */
     margin-bottom: 40px;
     text-align: center;
   }
-  
+
   h2 {
     font-size: 1.5rem;
-    /* color: #2c3e50; */
     margin-bottom: 20px;
     font-weight: 600;
   }
-  
+
   .booking-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  
+
   @media (min-width: 1024px) {
     .booking-grid {
       grid-template-columns: 1fr 1fr;
     }
-    
+
     .booking-form {
       grid-column: span 2;
     }
   }
-  
+
   /* Rate Cards */
   .rate-cards {
     display: grid;
     gap: 20px;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
-  
+
   .rate-card {
     background: white;
     border-radius: 10px;
@@ -358,42 +414,40 @@
     transition: all 0.3s ease;
     border: 2px solid #eee;
   }
-  
+
   .rate-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.1);
   }
-  
+
   .rate-card.selected {
     border-color: #4a6fa5;
     background-color: #f8fafd;
   }
-  
+
   .rate-card h3 {
     font-size: 1.2rem;
     margin-bottom: 10px;
     color: #2c3e50;
   }
-  
+
   .rate {
     font-size: 1.5rem;
     font-weight: 700;
-    /* color: #4a6fa5; */
     margin-bottom: 15px;
   }
-  
+
   /* Form Styles */
   .form-group {
     margin-bottom: 25px;
   }
-  
+
   label {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
-    /* color: #4a5568; */
   }
-  
+
   input, select, textarea {
     width: 100%;
     padding: 12px 15px;
@@ -402,16 +456,56 @@
     font-size: 1rem;
     transition: border-color 0.3s;
   }
-  
+
   input:focus, select:focus, textarea:focus {
     outline: none;
     border-color: #4a6fa5;
   }
-  
+
   textarea {
     resize: vertical;
   }
-  
+
+  /* Date Range Inputs */
+  .date-range-inputs {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .date-input-group {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .date-input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #2c3e50;
+  }
+
+  .date-input-group input {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+
+  .date-range-preview {
+    background-color: #f8fafd;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e1e8f0;
+    margin-bottom: 20px;
+  }
+
+  .date-range-preview p {
+    margin: 0;
+    font-weight: 500;
+  }
+
   /* Booking Summary */
   .booking-summary {
     background: white;
@@ -420,19 +514,19 @@
     margin: 30px 0;
     border: 1px solid #eee;
   }
-  
+
   .booking-summary h3 {
     margin-bottom: 15px;
     font-size: 1.3rem;
   }
-  
+
   .total {
     font-size: 1.3rem;
     font-weight: 700;
     color: #2c3e50;
     margin-top: 10px;
   }
-  
+
   /* Submit Button */
   .submit-btn {
     width: 100%;
@@ -446,85 +540,25 @@
     cursor: pointer;
     transition: all 0.3s ease;
   }
-  
+
   .submit-btn:hover {
     background-color: #3a5a8f;
     transform: translateY(-2px);
   }
-  
+
   .submit-btn:disabled {
     background-color: #ccc;
     cursor: not-allowed;
     transform: none;
   }
-  /* Payment Methods */
-  .payment-methods {
-    margin: 30px 0;
-  }
-  
-  .payment-methods h3 {
-    font-size: 1.1rem;
-    margin-bottom: 15px;
-    /* color: #4a5568; */
-  }
-  
-  .payment-buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-  }
-  
-  .payment-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* gap: 0px; */
-    padding: 12px;
-    border-radius: 6px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: 1px solid #ddd;
-    background: white;
-  }
-  
-  .payment-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  
-  .payment-icon {
-    width: 24px;
-    height: 16px;
-  }
-  
-  .payment-btn.stripe {
-    color: #6772e5;
-    border-color: #6772e5;
-  }
-  
-  .payment-btn.paypal {
-    color: #253b80;
-    border-color: #253b80;
-  }
-  
-  .payment-btn.zelle {
-    color: #6d1ed4;
-    border-color: #6d1ed4;
-  }
 
-  .test-button {
-    padding: 10px 20px;
-    background: #4a6fa5;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 20px;
-  }
-  
-  .test-button:hover {
-    background: #3a5a80;
+  @media (max-width: 768px) {
+    .date-range-inputs {
+      flex-direction: column;
+    }
+
+    .date-input-group {
+      min-width: auto;
+    }
   }
 </style>
-

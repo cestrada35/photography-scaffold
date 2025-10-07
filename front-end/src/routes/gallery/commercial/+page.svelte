@@ -1,8 +1,8 @@
-<!-- src/routes/gallery/[category]/+page.svelte -->
 <script>
   import Navbar from '$lib/components/Navbar.svelte';
   import { galleryImages, galleryImageDescriptions, galleryImageCategories, coverImages } from '$lib/utils/images.js';
   import { onMount } from 'svelte';
+  import { t } from '$stores/translationStore.js';
 
   // Hard-coded values
   const category = 'commercial'
@@ -31,47 +31,56 @@
   onMount(() => {
     loaded = true;
   });
+
+  // Make category content fully reactive
+  $: categoryContent = (() => {
+    switch(category) {
+      case 'commercial':
+        return {
+          title: $t('gallery.commercialTitle'),
+          subtitle: $t('gallery.commercialSubtitle')
+        };
+      case 'personal':
+        return {
+          title: $t('gallery.personalTitle'),
+          subtitle: $t('gallery.personalSubtitle')
+        };
+      case 'event':
+        return {
+          title: $t('gallery.eventTitle'),
+          subtitle: $t('gallery.eventSubtitle')
+        };
+      case 'nature':
+        return {
+          title: $t('gallery.natureTitle'),
+          subtitle: $t('gallery.natureSubtitle')
+        };
+      default:
+        return {
+          title: $t('gallery.defaultTitle'),
+          subtitle: $t('gallery.defaultSubtitle')
+        };
+    }
+  })();
+
+  // Debug: log when translations update
+  $: console.log('Gallery translations updated:', categoryContent.title, categoryContent.subtitle);
 </script>
 
 <Navbar />
 
 <main class="gallery-page">
-  <!-- {#each coverImages as img_name}
-      <img src={`/assets/cover/${img_name}`}>
-  {/each} -->
-
   <!-- Hero Section -->
   <section 
   class="hero-section" 
   style="background-image: url('/assets/cover/{heroImage}')"
   >
-  <!-- style="background-image: url('/photography-scaffold/assets/cover/{heroImage}')" -->
-
-
-    <!-- below is confirmed to work! -->
-    <!-- <img src={`/assets/cover/${heroImage}`} alt=""> -->
     <div class="hero-content">
       <h1 class="hero-title">
-        {#if category === 'commercial'}
-          Commercial Portfolio
-        {:else if category === 'personal'}
-          Personal Portraits
-        {:else if category === 'event'}
-          Event Photography
-        {:else}
-          Photography Gallery
-        {/if}
+        {categoryContent.title}
       </h1>
       <p class="hero-subtitle">
-        {#if category === 'commercial'}
-          Professional imagery for brands and businesses
-        {:else if category === 'personal'}
-          Authentic moments and meaningful portraits
-        {:else if category === 'event'}
-          Capturing your special occasions
-        {:else}
-          A collection of our finest work
-        {/if}
+        {categoryContent.subtitle}
       </p>
     </div>
   </section>
@@ -86,11 +95,6 @@
           class:loaded={loaded}
         >
           <div class="image-container">
-            <!-- <img 
-              src={`/photography-scaffold/assets/gallery/${item.filename}`} 
-              alt={item.description}
-              loading="lazy"
-            /> -->
             <img 
               src={`/assets/gallery/${item.filename}`} 
               alt={item.description}
@@ -112,15 +116,15 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
       </svg>
-      <h3>No photos in this category</h3>
-      <p>We couldn't find any photos matching this category</p>
-      <a href="/gallery/all" class="btn-primary">View All Photos</a>
+      <h3>{$t('gallery.noPhotosTitle')}</h3>
+      <p>{$t('gallery.noPhotosMessage')}</p>
+      <a href="/gallery/all" class="btn-primary">{$t('gallery.viewAllPhotos')}</a>
     </div>
   {/if}
 </main>
 
 <style>
-  
+  /* Your existing styles remain exactly the same! */
   .gallery-page {
     padding-top: 80px;
   }
@@ -150,36 +154,35 @@
 
    .hero-content {
     position: absolute;
-    top: 40px; /* Adjust this value to control distance from top */
+    top: 40px;
     left: 0;
     right: 0;
-    padding: 0 5%; /* Adds some side padding */
+    padding: 0 5%;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    max-width: none; /* Remove previous max-width constraint */
+    max-width: none;
     margin: 0;
   }
 
   .hero-title {
-    /* font-family: 'Playfair Display', serif; */
     font-size: 4rem;
     font-weight: 700;
     color: #2c3e50;
-    margin: 0; /* Remove previous margins */
+    margin: 0;
     line-height: 1.2;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-    text-align: left; /* Explicit left alignment */
+    text-align: left;
   }
 
   .hero-subtitle {
     font-size: 1.5rem;
     color: #4a5568;
-    max-width: 45%; /* Control subtitle width */
-    margin: 0; /* Remove previous margins */
+    max-width: 45%;
+    margin: 0;
     font-weight: 300;
-    text-align: right; /* Right alignment */
-    padding-top: 0.5rem; /* Optional: slight vertical adjustment */
+    text-align: right;
+    padding-top: 0.5rem;
   }
 
   /* Gallery Grid */
@@ -329,8 +332,6 @@
     }
     
     .hero-section {
-      /* border: 2px solid red;
-      background-image: url('{heroImage}'); */
       height: 50vh;
       min-height: 400px;
     }
@@ -342,6 +343,3 @@
     }
   }
 </style>
-
-
-<!-- TODO:  -->

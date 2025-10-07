@@ -190,7 +190,7 @@ export const foodLabels = [
   'Water-Boiled Fish',
   'Pan-Fried Wagyu Steak',
   'Seafood Spaghetti',
-  'BBQ Quail',
+  'BBQ Quail (by piece)',
   'Spaghetti and Meatballs',
   'Stir-Fied Clams',
   'Scallop Spaghetti', //32
@@ -228,4 +228,80 @@ export const foodPrices = [
   '55',
   '8',
   '32',
+];
+
+// Add this new array for food descriptions
+export const foodDescriptions = [
+  'Ham and Cheese Omelet with Blueberries',
+  'Eggs French Toast and Berries Breakfast',
+  'Fresh scallops with a gorgeous golden crust and a bright lemon-butter sauce, these scallops make a quick but special dinner that feels restaurant-worthy',
+  'Stir-Fried Chinese Bacon with Garlic Chili Peppers',
+  'Sichuan style spicy water-boiled fish',
+  'Premium wagyu steak pan-fried with butter served with Asparagus and Carrots',
+  'Pan Seared Scallop and Shrimp Spaghetti with Spinach in Creamy Sauce',
+  'Grilled quail seasoned with special spices',
+  'Tender homemade beef meatballs in a rich tomato sauce, served with spaghetti',
+  'Cantonese-style Stir Fried Clams with Garlic and Black Soybeans',
+  'Pan Seared Scallop Spaghetti with Spinach in Creamy Sauce and Pasta',
+  'Cheese Burger combo',
+  'Fresh berries and cream cake',
+  'Fresh berries and cream cake',
+  'Chocolate cake with berry filling and cream',
+  'Rich chocolate cake with berries and cream',
+  'Cheesecake with Strawberries and Blueberries',
+  'Cheesecake with White grapes and Blueberries',
+  'Cheesecake with Strawberries and Gold Kiwi',
+  'Shaved ice with sweet red beans and toppings',
+  'Grilled lamb chops with herbs and spices'
+];
+
+
+// Clothing items
+export const storeClothesImages = [
+  'shirt_1.jpg', 'shirt_2.jpg', 'shirt_3.jpg', 'shirt_4.jpg', 'shirt_5.jpg', 'shirt_6.jpg',
+  'sweater_1.jpg', 'sweater_2.jpg', 'sweater_3.jpg', 'sweater_4.jpg', 'sweater_5.jpg',
+  'long_shirt_1.jpg', 'long_shirt_2.jpg', 'long_shirt_3.jpg', 'long_shirt_4.jpg',
+  'jean_1.jpg', 'jean_2.jpg', 'jean_3.jpg', 'jean_4.jpg', 'jean_5.jpg',
+  'overalls_1.jpg', 'overalls_2.jpg', 'overalls_3.jpg',
+  'shoe_1.jpg', 'shoe_2.jpg', 'shoe_3.jpg', 'shoe_4.jpg', 'shoe_5.jpg'
+];
+
+export const storeClothesLabels = [
+  'Classic Photo Tee', 'Vintage Camera Shirt', 'Studio Logo Tee', 'Black Photo Shirt', 'White Graphic Tee', 'Art Print Shirt',
+  'Comfy Photo Sweater', 'Warm Studio Sweater', 'Cozy Camera Sweater', 'Gray Photo Sweater', 'Navy Art Sweater',
+  'Long Sleeve Photo Tee', 'Extended Studio Shirt', 'Oversized Camera Tee', 'Relaxed Fit Shirt',
+  'Slim Fit Jeans', 'Relaxed Jeans', 'Vintage Denim', 'Black Jeans', 'Classic Blue Jeans',
+  'Denim Overalls', 'Black Overalls', 'Vintage Overalls',
+  'Comfort Sneakers', 'Studio Shoes', 'Casual Walkers', 'Urban Shoes', 'Everyday Sneakers'
+];
+
+export const storeClothesPrices = [
+  '24.99', '26.99', '22.99', '25.99', '23.99', '27.99',
+  '34.99', '36.99', '32.99', '35.99', '33.99',
+  '28.99', '29.99', '27.99', '30.99',
+  '49.99', '52.99', '54.99', '51.99', '48.99',
+  '59.99', '61.99', '63.99',
+  '64.99', '69.99', '67.99', '65.99', '62.99'
+];
+
+// Accessory items  
+export const storeAccImages = [
+  'fan_1.jpg', 'fan_2.jpg', 'fan_3.jpg', 'fan_4.jpg', 'fan_5.jpg', 'fan_6.jpg', 
+  'fan_7.jpg', 'fan_8.jpg', 'fan_9.jpg', 'fan_10.jpg', 'fan_11.jpg',
+  'bed_sheets_1.jpg', 'bed_sheets_2.jpg', 'bed_sheets_3.jpg', 'bed_sheets_4.jpg',
+  'phone_case_1.jpg', 'phone_case_2.jpg', 'phone_case_3.jpg'
+];
+
+export const storeAccLabels = [
+  'Traditional Hand Fan', 'Floral Print Fan', 'Elegant Silk Fan', 'Classic Paper Fan', 'Decorative Ceremony Fan',
+  'Vintage Style Fan', 'Artistic Print Fan', 'Delicate Wooden Fan', 'Festival Fan', 'Ornate Design Fan', 'Simple Bamboo Fan',
+  'Photo Print Bed Sheets', 'Camera Pattern Sheets', 'Art Bedding Set', 'Studio Design Sheets',
+  'Phone Case - Camera', 'Phone Case - Vintage', 'Phone Case - Modern'
+];
+
+export const storeAccPrices = [
+  '12.99', '14.99', '16.99', '11.99', '13.99', '15.99', 
+  '17.99', '12.49', '13.49', '18.99', '10.99',
+  '39.99', '42.99', '44.99', '41.99',
+  '19.99', '21.99', '22.99'
 ];

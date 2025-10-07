@@ -1,13 +1,14 @@
 <script>
   import Navbar from '$lib/components/Navbar.svelte';
   import { websiteName } from '$stores/appStore'; 
+  import { t } from '$stores/translationStore.js';
   
   let name = '';
   let email = '';
   let message = '';
   
   function handleSubmit() {
-    alert(`Thank you for your message, ${name}! I'll get back to you soon.`);
+    alert($t('contact.thankYouMessage', { name: name }));
     name = '';
     email = '';
     message = '';
@@ -19,18 +20,18 @@
   
   <div class="contact-container">
     <div class="contact-content">
-      <h1 class="text-primary">Get In Touch</h1>
+      <h1 class="text-primary">{$t('contact.getInTouch')}</h1>
       
       <div class="contact-methods">
         <div class="contact-info text-primary">
-          <h2>Contact Information</h2>
+          <h2>{$t('contact.contactInformation')}</h2>
           
           <div class="info-item">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
               <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
             </svg>
             <div>
-              <h3>Email</h3>
+              <h3>{$t('contact.email')}</h3>
               <p class="text-primary">xueqingqing2020@gmail.com</p>
             </div>
           </div>
@@ -40,40 +41,38 @@
               <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
             </svg>
             <div>
-              <h3>Phone</h3>
+              <h3>{$t('contact.phone')}</h3>
               <p class="text-primary">(626) 487-9145</p>
             </div>
           </div>
           
           <div class="location-note">
-            <h3>Location Note</h3>
+            <h3>{$t('contact.locationNoteTitle')}</h3>
             <p>
-              I'm currently based in Los Angeles, California. If you're outside my service radius, 
-              please don't hesitate to reach out - I'm always open to discussing how we might make 
-              it work together! I frequently travel for assignments and would be happy to explore options.
+              {$t('contact.locationNoteText')}
             </p>
           </div>
         </div>
         
         <div class="contact-form">
-          <h2>Send a Message</h2>
+          <h2>{$t('contact.sendMessage')}</h2>
           <form on:submit|preventDefault={handleSubmit}>
             <div class="form-group">
-              <label for="name">Name</label>
+              <label for="name">{$t('contact.name')}</label>
               <input type="text" id="name" bind:value={name} required />
             </div>
             
             <div class="form-group">
-              <label for="email">Email</label>
+              <label for="email">{$t('contact.email')}</label>
               <input type="email" id="email" bind:value={email} required />
             </div>
             
             <div class="form-group">
-              <label for="message">Message</label>
+              <label for="message">{$t('contact.message')}</label>
               <textarea id="message" bind:value={message} rows="5" required></textarea>
             </div>
             
-            <button type="submit">Send Message</button>
+            <button type="submit">{$t('contact.sendMessageButton')}</button>
           </form>
         </div>
       </div>
@@ -84,7 +83,6 @@
 <style>
   main {
     padding-top: 60px;
-    /* background-color: #fafafa; */
     min-height: 100vh;
   }
   
@@ -110,7 +108,6 @@
     transform: translateX(-50%);
     width: 80px;
     height: 3px;
-    /* background-color: #333; */
     background-color: #a4a4a4;
   }
   
@@ -144,7 +141,6 @@
   
   .info-item p {
     font-size: 1.1rem;
-    /* color: #555; */
   }
   
   .location-note {

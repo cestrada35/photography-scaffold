@@ -4,6 +4,7 @@
   import BookNow from '$lib/components/BookNow.svelte';
   import Navbar from '$lib/components/Navbar.svelte';
   import { websiteName } from '$stores/appStore.js';
+  import { t } from '$stores/translationStore.js';
 </script>
 
 <main>
@@ -17,14 +18,11 @@
   <!-- Book Now Section -->
   <BookNow city="Los Angeles" website_name={$websiteName} />
 
-
-  <!-- <div class="divider divider-primary"></div> -->
-  
   <!-- Featured Gallery -->
   <section class="featured-gallery">
     <div class="section-header">
-      <h2 class="text-primary">Featured Work</h2>
-      <p class="text-primary">Explore our collection of stunning photography</p>
+      <h2 class="text-primary">{$t('home.featuredWork')}</h2>
+      <p class="text-primary">{$t('home.exploreCollection')}</p>
     </div>
     <GalleryGrid />
   </section>
@@ -34,7 +32,6 @@
   main {
     max-width: 100vw;
     overflow-x: hidden;
-    /* background-color: #fafafa; */
   }
   
   .hero-section {
@@ -58,16 +55,13 @@
   }
   
   .section-header h2 {
-    /* font-family: 'Playfair Display', serif; */
     font-size: 2.5rem;
     font-weight: 700;
-    /* color: #2c3e50; */
     margin-bottom: 1rem;
   }
   
   .section-header p {
     font-size: 1.25rem;
-    /* color: #4a5568; */
     font-weight: 300;
   }
   

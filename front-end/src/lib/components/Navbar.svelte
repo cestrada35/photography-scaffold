@@ -2,11 +2,7 @@
   import { onMount } from 'svelte';
   import { writable } from 'svelte/store';
   import { websiteName } from '$stores/appStore.js';
-  
-  // Create a store for the current language
-  export const currentLang = writable('en');
-
-
+  import { currentLang } from '$stores/languageStore.js'; // Import from the new store
   
   // Reactive variables
   let scrolled = false;
