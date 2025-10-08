@@ -6,6 +6,8 @@
   import { t } from '$stores/translationStore.js';
   import { page } from '$app/stores';
 
+
+  
   const location = "Los Angeles";
   const serviceRadius = 10;
   const rates = {
@@ -13,7 +15,8 @@
     event: 300,
     commercial: 350
   };
-
+  
+  
   // Form state
   let events = [];
   let selectedDate = null;
@@ -56,14 +59,14 @@
 
     try {
       const reservationData = {
-        title: `${selectedService} session for ${name}`,
-        customer_name: name,
-        customer_email: email,
-        service_type: selectedService,
-        hours: hours,
-        notes: notes,
-        status: 'pending'
-      };
+      title: `${selectedService} session for ${name}`,
+      customer_name: name,
+      customer_email: email,
+      service_type: selectedService,
+      hours: hours,
+      notes: notes,
+      status: 'pending'
+    };
 
       // Add date information based on mode
       if (isDateRangeMode) {
@@ -207,13 +210,13 @@
       <!-- Calendar Section -->
       <section class="calendar-section">
         <h2 class="text-primary">
-          {isDateRangeMode ? $t('booking.selectDateRange') : $t('booking.selectDate')}
+          {isDateRangeMode ? 'Enter Date Range' : $t('booking.selectDate')}
         </h2>
 
         {#if isDateRangeMode}
           <div class="date-range-inputs">
             <div class="date-input-group">
-              <label for="start-date">{$t('bookNow.startDate')} *</label>
+              <label for="start-date">Start Date *</label>
               <input
                 type="date"
                 id="start-date"
@@ -224,7 +227,7 @@
             </div>
 
             <div class="date-input-group">
-              <label for="end-date">{$t('bookNow.endDate')} *</label>
+              <label for="end-date">End Date *</label>
               <input
                 type="date"
                 id="end-date"
@@ -237,7 +240,7 @@
 
           {#if selectedStartDate && selectedEndDate}
             <div class="date-range-preview">
-              <p><strong>{$t('booking.selectedRange')}:</strong> {getDateRangeDescription()}</p>
+              <p><strong>Selected dates:</strong> {getDateRangeDescription()}</p>
             </div>
           {/if}
         {:else}
@@ -319,26 +322,26 @@
           </div>
 
           {#if selectedService && (selectedDate || (isDateRangeMode && selectedStartDate && selectedEndDate))}
-            <div class="booking-summary">
-              <h3>{$t('booking.bookingSummary')}</h3>
-              <p>
-                <u>{selectedService.charAt(0).toUpperCase() + selectedService.slice(1)}</u>
-                {isDateRangeMode ? $t('booking.rangeSessionFor') : $t('booking.sessionFor')}
-                {hours} {hours === 1 ? $t('booking.hour') : $t('booking.hours')}
-              </p>
-              <p>
-                {isDateRangeMode ? $t('booking.dateRange') : $t('booking.date')}:
-                {isDateRangeMode ? getDateRangeDescription() : selectedDate.toLocaleDateString()}
-              </p>
-              <p class="total">{$t('booking.total')}: ${calculateTotal()}</p>
-              <div class="refund-notice">
-                <i class="fas fa-exclamation-circle"></i>
-                <p>
-                  <strong>{$t('booking.depositPolicy')}:</strong> {$t('booking.depositText')}
-                </p>
-              </div>
-            </div>
-          {/if}
+  <div class="booking-summary">
+    <h3>{$t('booking.bookingSummary')}</h3>
+    <p>
+      <u>{selectedService.charAt(0).toUpperCase() + selectedService.slice(1)}</u>
+      {isDateRangeMode ? $t('booking.rangeSessionFor') : $t('booking.sessionFor')}
+      {hours} {hours === 1 ? $t('booking.hour') : $t('booking.hours')}
+    </p>
+    <p>
+      {isDateRangeMode ? $t('booking.dateRange') : $t('booking.date')}:
+      {isDateRangeMode ? getDateRangeDescription() : selectedDate.toLocaleDateString()}
+    </p>
+    <p class="total">{$t('booking.total')}: ${calculateTotal()}</p>
+    <div class="refund-notice">
+      <i class="fas fa-exclamation-circle"></i>
+      <p>
+        <strong>{$t('booking.depositPolicy')}:</strong> {$t('booking.depositText')}
+      </p>
+    </div>
+  </div>
+{/if}
 
           <button
             type="submit"
@@ -468,10 +471,13 @@
 
   /* Date Range Inputs */
   .date-range-inputs {
+    background-color: white;
+    border-radius: 5px;
     display: flex;
     gap: 20px;
     margin-bottom: 20px;
     flex-wrap: wrap;
+    padding: 15px
   }
 
   .date-input-group {

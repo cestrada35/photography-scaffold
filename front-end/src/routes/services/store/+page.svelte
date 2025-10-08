@@ -1,88 +1,108 @@
 <script>
   import { onMount } from 'svelte';
-  import { 
-    storeClothesImages, 
-    storeClothesLabels, 
-    storeClothesPrices,
-    storeAccImages,
-    storeAccLabels, 
-    storeAccPrices 
-  } from '../../../lib/utils/images.js';
+  import { storeProducts } from '../../../lib/utils/images.js';
   
-  // Generate clothing items
-  const clothingItems = storeClothesImages.map((image, index) => {
-    const name = storeClothesLabels[index] || `Clothing Item ${index + 1}`;
-    const price = storeClothesPrices[index] ? parseFloat(storeClothesPrices[index]) : (24.99 + index);
-    const imagePath = `/assets/store/clothes/${image}`;
-    
-    return {
-      id: index + 200, // Different ID range for clothing
-      name: name,
-      price: price,
-      image: imagePath,
-      category: 'clothing'
-    };
-  });
-  
-  // Generate accessory items
-  const accessoryItems = storeAccImages.map((image, index) => {
-    const name = storeAccLabels[index] || `Accessory Item ${index + 1}`;
-    const price = storeAccPrices[index] ? parseFloat(storeAccPrices[index]) : (14.99 + index);
-    const imagePath = `/assets/store/accessories/${image}`;
-    
-    return {
-      id: index + 300, // Different ID range for accessories
-      name: name,
-      price: price,
-      image: imagePath,
-      category: 'accessories'
-    };
-  });
-  
-  // Add placeholders if needed
-  const itemsPerSection = 4;
-  
-  // if (clothingItems.length < itemsPerSection) {
-  //   for (let i = clothingItems.length; i < itemsPerSection; i++) {
-  //     clothingItems.push({
-  //       id: i + 200,
-  //       name: `Premium Apparel ${i + 1}`,
-  //       price: 29.99 + i,
-  //       image: "/assets/store/clothes/placeholder.jpg",
-  //       category: 'clothing'
-  //     });
-  //   }
-  // }
-  
-  // if (accessoryItems.length < itemsPerSection) {
-  //   for (let i = accessoryItems.length; i < itemsPerSection; i++) {
-  //     accessoryItems.push({
-  //       id: i + 300,
-  //       name: `Photo Accessory ${i + 1}`,
-  //       price: 19.99 + i,
-  //       image: "/assets/store/accessories/placeholder.jpg",
-  //       category: 'accessories'
-  //     });
-  //   }
-  // }
-  
-  // Cart functionality (same as before)
-  let cart = [];
+  // State management
+  let selectedProduct = null;
   let showCart = false;
+  let cart = [];
+  let selectedOptions = {};
+  let currentImageIndex = 0;
   
-  function addToCart(item) {
-    const existingItem = cart.find(i => i.id === item.id);
+  // Group products by category
+  const clothingProducts = storeProducts.filter(p => p.category === 'clothing');
+  const accessoryProducts = storeProducts.filter(p => p.category === 'accessories');
+  
+  // Product selection and modal
+  function openProductModal(product) {
+    selectedProduct = product;
+    selectedOptions = {};
+    currentImageIndex = 0;
+    
+    // Initialize selected options with first available option for each variant
+    product.variants.forEach(variant => {
+      if (variant.type === 'size-color' || variant.type === 'size') {
+        selectedOptions.size = variant.options.size[0];
+      }
+      if (variant.type === 'size-color' || variant.type === 'model-color') {
+        const colorKey = variant.type === 'size-color' ? 'color' : 'color';
+        selectedOptions[colorKey] = variant.options[colorKey][0];
+      }
+      if (variant.type === 'model-color') {
+        selectedOptions.model = variant.options.model[0];
+      }
+      if (variant.type === 'design') {
+        selectedOptions.design = variant.options.design[0];
+      }
+    });
+  }
+  
+  function closeProductModal() {
+    selectedProduct = null;
+    selectedOptions = {};
+  }
+  
+  // Image carousel functions
+  function nextImage() {
+    if (selectedProduct) {
+      currentImageIndex = (currentImageIndex + 1) % selectedProduct.images.length;
+    }
+  }
+  
+  function prevImage() {
+    if (selectedProduct) {
+      currentImageIndex = (currentImageIndex - 1 + selectedProduct.images.length) % selectedProduct.images.length;
+    }
+  }
+  
+  function selectImage(index) {
+    currentImageIndex = index;
+  }
+  
+  // Check if all required options are selected
+  function areAllOptionsSelected() {
+    if (!selectedProduct) return false;
+    
+    const requiredOptions = [];
+    selectedProduct.variants.forEach(variant => {
+      if (variant.type === 'size-color') {
+        requiredOptions.push('size', 'color');
+      } else if (variant.type === 'size') {
+        requiredOptions.push('size');
+      } else if (variant.type === 'model-color') {
+        requiredOptions.push('model', 'color');
+      } else if (variant.type === 'design') {
+        requiredOptions.push('design');
+      }
+    });
+    
+    return requiredOptions.every(option => selectedOptions[option]);
+  }
+  
+  // Cart functionality
+  function addToCart() {
+    if (!selectedProduct || !areAllOptionsSelected()) return;
+    
+    const cartItem = {
+      id: `${selectedProduct.id}-${JSON.stringify(selectedOptions)}`,
+      productId: selectedProduct.id,
+      name: selectedProduct.name,
+      price: selectedProduct.basePrice,
+      options: { ...selectedOptions },
+      image: `/assets/store/${selectedProduct.category}/${selectedProduct.images[0]}`
+    };
+    
+    const existingItem = cart.find(item => item.id === cartItem.id);
     
     if (existingItem) {
       existingItem.quantity += 1;
       cart = [...cart];
     } else {
-      cart = [...cart, { ...item, quantity: 1 }];
+      cart = [...cart, { ...cartItem, quantity: 1 }];
     }
     
-    if (cart.length === 1) {
-      showCart = true;
-    }
+    showCart = true;
+    closeProductModal();
   }
   
   function removeFromCart(itemId) {
@@ -102,6 +122,7 @@
   
   $: total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   $: totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  $: canAddToCart = selectedProduct ? areAllOptionsSelected() : false;
 </script>
 
 <div class="container mx-auto px-4 py-8">
@@ -110,6 +131,7 @@
     <h1 class="text-4xl font-bold text-primary mb-4">Helen's Online Outlet</h1>
     <p class="text-xl text-gray-300">Clothing and Accessories</p>
     <p class="mt-2 text-lg text-gray-300">Shipping calculated at checkout • 30-day returns</p>
+    <p class="mt-2 text-lg text-gray-300">Thank you for supporting my business!</p>
   </div>
   
   <!-- Main content -->
@@ -124,27 +146,38 @@
           <div class="flex-1 h-px bg-primary/30"></div>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {#each clothingItems as item}
-            <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-primary/20">
-              <figure class="h-48 overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {#each clothingProducts as product}
+            <div 
+              class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-primary/20 cursor-pointer"
+              on:click={() => openProductModal(product)}
+            >
+              <figure class="h-64 overflow-hidden">
                 <img 
-                  src={item.image} 
-                  alt={item.name}
+                  src={`/assets/store/clothing/${product.images[0]}`} 
+                  alt={product.name}
                   class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                 />
               </figure>
               <div class="card-body p-5 bg-white rounded-b-2xl">
-                <div class="flex justify-between items-start mb-3">
-                  <h2 class="card-title text-primary">{item.name}</h2>
-                  <span class="text-xl font-bold text-primary">${item.price.toFixed(2)}</span>
+                <div class="flex justify-between items-start mb-2">
+                  <h2 class="card-title text-primary">{product.name}</h2>
+                  <span class="text-xl font-bold text-primary">${product.basePrice.toFixed(2)}</span>
+                </div>
+                <p class="text-sm text-gray-600 mb-3 leading-relaxed">
+                  {product.description}
+                </p>
+                <div class="flex flex-wrap gap-1 mb-3">
+                  {#each product.images.slice(0, 3) as _, index}
+                    <div class="w-2 h-2 rounded-full bg-primary/40"></div>
+                  {/each}
+                  {#if product.images.length > 3}
+                    <div class="text-xs text-gray-500">+{product.images.length - 3} more</div>
+                  {/if}
                 </div>
                 <div class="card-actions justify-end">
-                  <button 
-                    class="btn btn-primary text-info"
-                    on:click={() => addToCart(item)}
-                  >
-                    Add to Cart
+                  <button class="btn btn-primary text-info">
+                    View Options
                   </button>
                 </div>
               </div>
@@ -162,26 +195,37 @@
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {#each accessoryItems as item}
-            <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-primary/20">
+          {#each accessoryProducts as product}
+            <div 
+              class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border border-primary/20 cursor-pointer"
+              on:click={() => openProductModal(product)}
+            >
               <figure class="h-48 overflow-hidden">
                 <img 
-                  src={item.image} 
-                  alt={item.name}
+                  src={`/assets/store/accessories/${product.images[0]}`} 
+                  alt={product.name}
                   class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                 />
               </figure>
               <div class="card-body p-5 bg-white rounded-b-2xl">
-                <div class="flex justify-between items-start mb-3">
-                  <h2 class="card-title text-primary">{item.name}</h2>
-                  <span class="text-xl font-bold text-primary">${item.price.toFixed(2)}</span>
+                <div class="flex justify-between items-start mb-2">
+                  <h2 class="card-title text-primary">{product.name}</h2>
+                  <span class="text-xl font-bold text-primary">${product.basePrice.toFixed(2)}</span>
+                </div>
+                <p class="text-sm text-gray-600 mb-3 leading-relaxed">
+                  {product.description}
+                </p>
+                <div class="flex flex-wrap gap-1 mb-3">
+                  {#each product.images.slice(0, 3) as _, index}
+                    <div class="w-2 h-2 rounded-full bg-primary/40"></div>
+                  {/each}
+                  {#if product.images.length > 3}
+                    <div class="text-xs text-gray-500">+{product.images.length - 3} more</div>
+                  {/if}
                 </div>
                 <div class="card-actions justify-end">
-                  <button 
-                    class="btn btn-primary text-info"
-                    on:click={() => addToCart(item)}
-                  >
-                    Add to Cart
+                  <button class="btn btn-primary text-info">
+                    View Options
                   </button>
                 </div>
               </div>
@@ -191,7 +235,7 @@
       </section>
     </div>
     
-    <!-- Cart Sidebar (unchanged) -->
+    <!-- Cart Sidebar -->
     <div class="w-full lg:w-1/3">
       <div class="sticky top-4">
         {#if showCart}
@@ -213,6 +257,13 @@
                         <span class="font-medium">{item.quantity}x</span>
                         <div>
                           <p class="font-medium">{item.name}</p>
+                          <p class="text-sm text-gray-500">
+                            {#each Object.entries(item.options) as [key, value]}
+                            <p>
+                              {key}: {value}
+                            </p>
+                            {/each}
+                          </p>
                           <p class="text-sm text-gray-500">${item.price.toFixed(2)} each</p>
                         </div>
                       </div>
@@ -227,30 +278,18 @@
                     <span class="text-primary">${total.toFixed(2)}</span>
                   </div>
                   
-                  <!-- Shipping Progress -->
-                  {#if total < 50}
-                    <div class="bg-warning/10 p-3 rounded-lg mb-3">
-                      <p class="text-sm text-center">
-                        Add <span class="font-bold">${(50 - total).toFixed(2)}</span> more for free shipping!
-                      </p>
-                    </div>
-                  {:else}
-                    <div class="bg-success/10 p-3 rounded-lg mb-3">
-                      <p class="text-sm text-center text-success font-bold">
-                        🎉 You qualify for free shipping!
-                      </p>
-                    </div>
-                  {/if}
-                  
-                  <button class="btn btn-primary w-full mb-3 text-info">
-                    Proceed to Checkout
-                  </button>
+                  <p class="text-center text-primary font-bold">
+                    Text to confirm your order:
+                  </p>
+                  <p class="text-center text-2xl font-bold text-primary mt-2">
+                    626-487-9145
+                  </p>
                   
                   <p class="text-xs text-gray-500 text-center">
-                    30-day money-back guarantee • Secure checkout
+                    30-day money-back guarantee
                   </p>
                 </div>
-              {:else}
+                {:else}
                 <p class="text-center py-8 text-gray-500">Your cart is empty</p>
               {/if}
             </div>
@@ -272,6 +311,206 @@
     </div>
   </div>
 </div>
+
+<!-- Product Modal -->
+<!-- Product Modal -->
+{#if selectedProduct}
+  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+      <div class="flex flex-col lg:flex-row h-full">
+        <!-- Image Carousel -->
+        <div class="lg:w-1/2 p-6">
+          <div class="relative">
+            <!-- Main Image -->
+            <div class="aspect-square overflow-hidden rounded-lg bg-gray-100">
+              <img 
+                src={`/assets/store/${selectedProduct.category}/${selectedProduct.images[currentImageIndex]}`}
+                alt={selectedProduct.name}
+                class="w-full h-full object-cover"
+              />
+            </div>
+            
+            <!-- Navigation Arrows -->
+            {#if selectedProduct.images.length > 1}
+              <button 
+                class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100"
+                on:click={prevImage}
+              >
+                ←
+              </button>
+              <button 
+                class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100"
+                on:click={nextImage}
+              >
+                →
+              </button>
+            {/if}
+            
+            <!-- Thumbnail Strip -->
+            {#if selectedProduct.images.length > 1}
+              <div class="flex gap-2 mt-4 overflow-x-auto">
+                {#each selectedProduct.images as image, index}
+                  <button 
+                    class={`flex-shrink-0 w-16 h-16 rounded border-2 ${index === currentImageIndex ? 'border-primary' : 'border-gray-300'}`}
+                    on:click={() => selectImage(index)}
+                  >
+                    <img 
+                      src={`/assets/store/${selectedProduct.category}/${image}`}
+                      alt={`${selectedProduct.name} view ${index + 1}`}
+                      class="w-full h-full object-cover rounded"
+                    />
+                  </button>
+                {/each}
+              </div>
+            {/if}
+          </div>
+        </div>
+        
+        <!-- Product Details -->
+        <div class="lg:w-1/2 p-6 flex flex-col">
+          <div class="flex-1">
+            <div class="flex justify-between items-start mb-4">
+              <h2 class="text-2xl font-bold text-primary">{selectedProduct.name}</h2>
+              <button 
+                class="text-gray-500 hover:text-gray-700 text-2xl"
+                on:click={closeProductModal}
+              >
+                ×
+              </button>
+            </div>
+            
+            <p class="text-3xl font-bold text-primary mb-4">${selectedProduct.basePrice.toFixed(2)}</p>
+            <p class="text-gray-600 mb-6">{selectedProduct.description}</p>
+            
+            <!-- Variant Options -->
+            <div class="space-y-6">
+              {#each selectedProduct.variants as variant}
+                {#if variant.type === 'size-color'}
+                  <!-- Size Selection -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Size</label>
+                    <div class="flex flex-wrap gap-2">
+                      {#each variant.options.size as sizeOption}
+                        <button
+                          class={`px-4 py-2 border rounded-lg font-medium ${
+                            selectedOptions.size === sizeOption 
+                              ? 'border-primary bg-primary text-primary' 
+                              : 'border-gray-300 text-gray-700 hover:border-primary'
+                          }`}
+                          on:click={() => selectedOptions.size = sizeOption}
+                        >
+                          {sizeOption}
+                        </button>
+                      {/each}
+                    </div>
+                  </div>
+                  
+                  <!-- Color Selection -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Color</label>
+                    <div class="flex flex-wrap gap-2">
+                      {#each variant.options.color as colorOption}
+                        <button
+                          class={`px-4 py-2 border rounded-lg font-medium ${
+                            selectedOptions.color === colorOption 
+                              ? 'border-primary bg-primary text-primary' 
+                              : 'border-gray-300 text-gray-700 hover:border-primary'
+                          }`}
+                          on:click={() => selectedOptions.color = colorOption}
+                        >
+                          {colorOption}
+                        </button>
+                      {/each}
+                    </div>
+                  </div>
+                {:else if variant.type === 'size'}
+                  <!-- Size Only -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Size</label>
+                    <div class="flex flex-wrap gap-2">
+                      {#each variant.options.size as sizeOption}
+                        <button
+                          class={`px-4 py-2 border rounded-lg font-medium ${
+                            selectedOptions.size === sizeOption 
+                              ? 'border-primary bg-primary text-primary' 
+                              : 'border-gray-300 text-gray-700 hover:border-primary'
+                          }`}
+                          on:click={() => selectedOptions.size = sizeOption}
+                        >
+                          {sizeOption}
+                        </button>
+                      {/each}
+                    </div>
+                  </div>
+                {:else if variant.type === 'model-color'}
+                  <!-- Model Selection -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Phone Model</label>
+                    <select 
+                      class="w-full p-2 border border-gray-300 rounded-lg text-gray-700"
+                      bind:value={selectedOptions.model}
+                    >
+                      {#each variant.options.model as modelOption}
+                        <option value={modelOption}>{modelOption}</option>
+                      {/each}
+                    </select>
+                  </div>
+                  
+                  <!-- Color Selection -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Color</label>
+                    <div class="flex flex-wrap gap-2">
+                      {#each variant.options.color as colorOption}
+                        <button
+                          class={`px-4 py-2 border rounded-lg font-medium ${
+                            selectedOptions.color === colorOption 
+                              ? 'border-primary bg-primary text-primary' 
+                              : 'border-gray-300 text-gray-700 hover:border-primary'
+                          }`}
+                          on:click={() => selectedOptions.color = colorOption}
+                        >
+                          {colorOption}
+                        </button>
+                      {/each}
+                    </div>
+                  </div>
+                {:else if variant.type === 'design'}
+                  <!-- Design Selection -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Design</label>
+                    <select 
+                      class="w-full p-2 border border-gray-300 rounded-lg text-gray-700"
+                      bind:value={selectedOptions.design}
+                    >
+                      {#each variant.options.design as designOption}
+                        <option value={designOption}>{designOption}</option>
+                      {/each}
+                    </select>
+                  </div>
+                {/if}
+              {/each}
+            </div>
+          </div>
+          
+          <!-- Add to Cart Button -->
+          <div class="mt-6">
+            <button
+              class="w-full bg-primary text-primary py-3 px-6 rounded-lg font-semibold text-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-primary/90 transition-colors"
+              disabled={!canAddToCart}
+              on:click={addToCart}
+            >
+              {#if canAddToCart}
+                Add to Cart - ${selectedProduct.basePrice.toFixed(2)}
+              {:else}
+                Select Options
+              {/if}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{/if}
 
 <style>
   .container {

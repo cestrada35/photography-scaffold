@@ -82,6 +82,7 @@
     <h1 class="text-4xl font-bold text-primary mb-4">Helen's Studio Kitchen</h1>
     <p class="text-xl text-gray-300">Select your favorites and place your order</p>
     <p class="mt-2 text-lg text-gray-300">Text or Call to place your order or deliver within 5 miles of the Torrance area</p>
+    <p class="mt-2 text-lg text-gray-300">Thank you for supporting my business!</p>
   </div>
   
   <!-- Main content -->

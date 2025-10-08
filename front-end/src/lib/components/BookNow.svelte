@@ -1,24 +1,52 @@
 <script>
-	import { getWeekOfMonth } from "date-fns";
+  import { t } from '$stores/translationStore.js';
 
   export let city = "City Name Default";
   export let website_name = "Website Name Default";
+  
+  // Date range state
+  let startDate = null;
+  let endDate = null;
+  let isDateRangeMode = false;
+  
   function handleBooking() {
-    // alert("Booking functionality will be added soon!");
-    // window.location('/booking/')
+    if (isDateRangeMode) {
+      // Handle date range booking
+      if (!startDate || !endDate) {
+        alert($t('bookNow.selectDateRange'));
+        return;
+      }
+      // Redirect to booking page for date range
+      window.location.href = '/booking/?mode=range';
+    } else {
+      // Regular single date booking
+      window.location.href = '/booking/';
+    }
+  }
+
+  function toggleDateRangeMode() {
+    isDateRangeMode = !isDateRangeMode;
+    // Reset dates when switching modes
+    startDate = null;
+    endDate = null;
+  }
+
+  function formatDate(date) {
+    if (!date) return '';
+    return date.toLocaleDateString();
   }
 </script>
 
 <div class="book-now-section">
   <div class="content">
     <h1 class="text-primary">{website_name}</h1>
-    <p class="text-primary">{city} photographer specializing in capturing timeless moments</p>
-    <!-- <button class="book-now-button" on:click={handleBooking}> -->
-       <button class="book-now-button text-primary">
-        <a href="/booking/" style="display: inline-block;" class="py-2 px-4" >
-            Book Now
-        </a>
-      </button>
+    <p class="text-primary">{$t('bookNow.specializingIn', { city: city })}</p>
+    
+    <button class="book-now-button text-primary" on:click={handleBooking}>
+      <a style="display: inline-block;" class="py-2 px-4">
+        {isDateRangeMode ? $t('bookNow.bookRange') : $t('bookNow.bookNowButton')}
+      </a>
+    </button>
   </div>
 </div>
 
